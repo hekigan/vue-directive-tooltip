@@ -2,18 +2,23 @@
 
 ![Node](https://img.shields.io/node/v/vue-directive-tooltip.svg?style=flat-square)
 [![NPM](https://img.shields.io/npm/v/vue-directive-tooltip.svg?style=flat-square)](https://www.npmjs.com/package/vue-directive-tooltip)
-[![Travis](https://img.shields.io/travis/hekigan/vue-directive-tooltip/master.svg?style=flat-square)](https://travis-ci.org/hekigan/vue-directive-tooltip)
-[![David](https://img.shields.io/david/hekigan/vue-directive-tooltip.svg?style=flat-square)](https://david-dm.org/hekigan/vue-directive-tooltip)
-[![Coverage Status](https://img.shields.io/coveralls/hekigan/vue-directive-tooltip.svg?style=flat-square)](https://coveralls.io/github/hekigan/vue-directive-tooltip)
+[![Vue.js](https://img.shields.io/badge/vue-2-green.svg)](https://vuejs.org)
 
-> Vue.js tooltip directive 
+> Vue.js tooltip directive ([based on Popper.js](https://github.com/FezVrasta/popper.js))
 
 ### Usage
 
 ```js
-import vueDirectiveTooltip from 'vue-directive-tooltip';
-
+import Tooltip from 'vue-directive-tooltip';
+// or require('vue-directive-tooltip');
 ```
+
+```html
+<span v-tooltip="'my text'">some text</span>
+```
+
+It is recommended to also add the CSS file which is in the `./css/` folder.
+A SASS file is also included in the source for those who prefer fiddling.
 
 ### Installation
 
@@ -28,31 +33,44 @@ or npm
 
 ### configuration
 
-You can pass in extra options as a configuration object (➕ required, ➖ optional, ✏️ default).
-
-```js
-import vueDirectiveTooltip from 'vue-directive-tooltip';
-
+```html
+<span v-tooltip="'my text'">some text</span>
+```
+or
+```html
+<span v-tooltip="{content: 'my text'}">some text</span>
 ```
 
-➖ **property** ( type ) ` ✏️ default `
-<br/> 📝 description
-<br/> ❗️ warning
-<br/> ℹ️ info
+**modifier**
+<br/> 📝 Change the position of the tooltip
+<br/> ℹ️ options: bottom (default) | top | left | right
 <br/> 💡 example
-
-### methods
-
-#### #name
-
-```js
-vueDirectiveTooltip
-
+```html
+<span v-tooltip.top="'my text'">some text</span>
+```
+**content**
+<br/> 📝 Set the text to display
+<br/> 💡 example
+```html
+<span v-tooltip="{ content: 'my text' }">some text</span>
+```
+**class**
+<br/> 📝 Append custom CSS class
+<br/> 💡 example
+```html
+<span v-tooltip="{ class: 'custom-class other-custom-class' }">some text</span>
+```
+**visible**
+<br/> 📝 Show/hide the tooltip
+<br/> ℹ️ options: true (default) | false
+<br/> 💡 example
+```html
+<span v-tooltip="{ content: 'my text', visible: true }">some text</span>
 ```
 
 ### Examples
 
-See [`example`](example/script.js) folder or the [runkit](https://runkit.com/hekigan/vue-directive-tooltip) example.
+See [`example`](example/index.html) folder.
 
 ### Builds
 
@@ -73,4 +91,4 @@ We are open to contributions, see [CONTRIBUTING.md](CONTRIBUTING.md) for more in
 
 ### Misc
 
-This module was created using [generator-module-boilerplate](https://github.com/duivvv/generator-module-boilerplate).
+This module was created using [generator-module-extended-boilerplate](https://github.com/hekigan/generator-module-extended-boilerplate).

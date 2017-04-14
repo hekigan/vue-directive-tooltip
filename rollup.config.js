@@ -3,6 +3,8 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
 import bundleSize from 'rollup-plugin-bundle-size';
 import commonjs from 'rollup-plugin-commonjs';
+import vue from 'rollup-plugin-vue';
+import buble from 'rollup-plugin-buble';
 
 const name = `vueDirectiveTooltip`;
 
@@ -15,6 +17,8 @@ const plugins = [
   commonjs({
     include: `node_modules/**`
   }),
+  vue({compileTemplate: true}),
+  buble(),
   bundleSize()
 ];
 
