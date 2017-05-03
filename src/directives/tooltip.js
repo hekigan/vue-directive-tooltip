@@ -120,6 +120,6 @@ function onMouseOver (e) {
 }
 
 function onMouseOut (e) {
-    const el = e.target;
+    const el = e.currentTarget;
     Popper.Utils.setStyles(el.popper.popper, {visibility: 'hidden'});
 }
