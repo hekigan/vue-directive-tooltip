@@ -114,12 +114,12 @@ function setAttributes ($popper, $content, el) {
 }
 
 function onMouseOver (e) {
-    const el = e.target;
+    const el = e.currentTarget;
     Popper.Utils.setStyles(el.popper.popper, {visibility: 'visible'});
     el.popper.update();
 }
 
 function onMouseOut (e) {
-    const el = e.target;
+    const el = e.currentTarget;
     Popper.Utils.setStyles(el.popper.popper, {visibility: 'hidden'});
 }
