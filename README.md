@@ -9,8 +9,12 @@
 ### Usage
 
 ```js
+// ES6
 import Tooltip from 'vue-directive-tooltip';
-// or require('vue-directive-tooltip');
+Vue.use(Tooltip);
+
+// ES5
+require('vue-directive-tooltip');
 ```
 
 ```html
