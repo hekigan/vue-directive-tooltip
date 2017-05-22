@@ -1,6 +1,7 @@
 /**
  * @author: laurent blanes <laurent.blanes@gmail.com>
  */
+import Utils from 'popper.js/dist/popper-utils';
 import Popper from 'popper.js';
 
 const BASE_CLASS = 'vue-tooltip';
@@ -45,7 +46,7 @@ export default {
                 // wrapper
                 $popper = document.createElement('div');
                 $popper.setAttribute('class', BASE_CLASS);
-                Popper.Utils.setStyles($popper, {visibility: 'hidden'});
+                Utils.setStyles($popper, {visibility: 'hidden'});
 
                 // make arrow
                 let $arrow = document.createElement('div');
@@ -106,7 +107,7 @@ function setProperties (el, binding) {
 
 function setAttributes ($popper, $content, el) {
     $content.innerHTML = el.popper._content;
-    Popper.Utils.setStyles(el.popper.popper, {
+    Utils.setStyles(el.popper.popper, {
         display: el.popper._visible ? 'inline-block' : 'none'
     });
     const classes = `${BASE_CLASS} ${el.popper._class}`;
@@ -115,11 +116,11 @@ function setAttributes ($popper, $content, el) {
 
 function onMouseOver (e) {
     const el = e.currentTarget;
-    Popper.Utils.setStyles(el.popper.popper, {visibility: 'visible'});
+    Utils.setStyles(el.popper.popper, {visibility: 'visible'});
     el.popper.update();
 }
 
 function onMouseOut (e) {
     const el = e.currentTarget;
-    Popper.Utils.setStyles(el.popper.popper, {visibility: 'hidden'});
+    Utils.setStyles(el.popper.popper, {visibility: 'hidden'});
 }
