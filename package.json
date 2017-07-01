@@ -25,11 +25,13 @@
     "prebuild:sass": "node-sass src/css --output-style=compressed -o ./css",
     "build:sass": "postcss --use autoprefixer -b 'last 2 versions' < ./css/index.css | postcss --use cssnano > ./css/index.min.css",
     "build:sass:watch": "node-sass -w src/css -o ./css --source-map=true --source-map-contents --error-bell",
-    "build": "clear && npm run build:cjs && npm run build:es && npm run build:umd  && npm run build:sass",
+    "build": "clear && npm run build:cjs && npm run build:es && npm run build:umd && npm run build:sass && npm run copy:assets",
     "build:watch": "clear && rimraf cjs && cross-env BABEL_ENV=cjs babel -w src --out-dir cjs  & npm run build:sass:watch",
     "build:es": "rimraf es && cross-env BABEL_ENV=es babel src --out-dir es",
     "build:cjs": "rimraf cjs && cross-env BABEL_ENV=cjs babel src --out-dir cjs",
-    "build:umd": "rimraf dist && cross-env BABEL_ENV=es rollup -c & cross-env BABEL_ENV=es NODE_ENV=production rollup -c"
+    "build:umd": "rimraf dist && cross-env BABEL_ENV=es rollup -c & cross-env BABEL_ENV=es NODE_ENV=production rollup -c",
+    "copy:assets": "cp ./css/*.* ./docs/css/ && rm ./docs/js/vueDirectiveTooltip.js && cp ./dist/vueDirectiveTooltip.js ./docs/js/",
+    "serve:doc": "cd ./docs && jekyll serve --incremental"
   },
   "keywords": [],
   "author": "Laurent Blanes (laurent.blanes@gmail.com)",
@@ -56,15 +58,15 @@
     "rimraf": "^2.5.4",
     "rollup": "^0.39.2",
     "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-buble": "^0.15.0",
     "rollup-plugin-bundle-size": "^1.0.1",
     "rollup-plugin-commonjs": "^7.0.0",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-uglify": "^1.0.1",
     "rollup-plugin-vue": "^2.3.1",
-    "rollup-plugin-buble": "^0.15.0",
     "vue": "^2.2.6"
   },
   "dependencies": {
-    "popper.js": "^1.9.5"
+    "tooltip.js": "^1.1.4"
   }
 }

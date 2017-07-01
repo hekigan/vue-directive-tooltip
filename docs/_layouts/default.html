@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+    {% include /head.html %}
+    <body>
+        <div id="wrapper">
+        {% include /header.html %}
+
+            <!-- Main -->
+            <div id="main">
+                {{ content }}
+
+            </div>
+            {% include /footer.html %}
+		</div>
+        <script>
+            new Vue({ el: '#main', data() {
+                return {
+                    visibility: false
+                };
+            } });
+        </script>
+	</body>
+</html>

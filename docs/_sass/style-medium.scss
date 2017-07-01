@@ -1,0 +1,132 @@
+@import 'vars';
+@import 'mixins';
+
+/*
+	Read Only by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Basic */
+
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+
+/* Image */
+
+	.image {
+		&.left,
+		&.right {
+			max-width: 40%;
+
+			img {
+				width: 100%;
+			}
+		}
+	}
+
+/* Header */
+
+	#skel-layers-wrapper {
+		padding-top: 44px;
+	}
+
+	#header {
+		background: none;
+		bottom: auto;
+		left: auto;
+		position: relative;
+		right: auto;
+		top: auto;
+		width: 100%;
+
+		> footer {
+			bottom: auto;
+			left: auto;
+			margin: 1em 0 0 0;
+			position: relative;
+			right: auto;
+			top: auto;
+		}
+	}
+
+/* Wrapper */
+
+	#wrapper {
+		padding: 0;
+	}
+
+/* One */
+
+	#one {
+		&:before {
+			height: 10em;
+		}
+	}
+
+/* Layers */
+
+	#titleBar {
+		background: #222;
+		color: #fff;
+		min-width: 320px;
+
+		.title {
+			color: #fff;
+			display: block;
+			font-weight: $font-weight-bold;
+			height: 44px;
+			line-height: 44px;
+			padding: 0 1em;
+			width: 100%;
+
+			@if $side-header == 'right' {
+				text-align: left;
+			}
+			@else {
+				text-align: right;
+			}
+		}
+
+		.toggle {
+			@include icon;
+			height: 4em;
+			position: absolute;
+			top: 0;
+			width: 6em;
+
+			@if $side-header == 'right' {
+				right: 0;
+			}
+			@else {
+				left: 0;
+			}
+
+			&:before {
+				background: $color-accent-bg;
+				color: $color-accent-fg-bold;
+				content: '\f0c9';
+				display: block;
+				font-size: 18px;
+				height: 44px;
+				line-height: 44px;
+				position: absolute;
+				text-align: center;
+				top: 0;
+				width: 64px;
+
+				@if $side-header == 'right' {
+					right: 0;
+				}
+				@else {
+					left: 0;
+				}
+			}
+		}
+	}
+
+	#sidePanel {
+		background: $color-header-bg;
+		color: $color-header-fg;
+	}

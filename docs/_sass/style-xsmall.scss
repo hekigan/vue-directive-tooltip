@@ -1,0 +1,74 @@
+@import 'vars';
+@import 'mixins';
+
+/*
+	Read Only by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Basic */
+	
+	html, body {
+		min-width: 320px;
+	}
+
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+
+/* List */
+
+	ul {
+		&.actions {
+			margin: 0 0 $size-element-margin 0;
+			
+			li {
+				display: block;
+				padding: ($size-element-margin * 0.5) 0 0 0;
+				text-align: center;
+				width: 100%;
+				
+				&:first-child {
+					padding-top: 0;
+				}
+				
+				> * {
+					width: 100%;
+					margin: 0 !important;
+					
+					&.icon {
+						&:before {
+							margin-left: -2em;
+						}
+					}
+				}
+			}
+			
+			&.small {
+				li {
+					padding: ($size-element-margin * 0.25) 0 0 0;
+
+					&:first-child {
+						padding-top: 0;
+					}
+				}
+			}
+		}
+
+		&.feature-icons {
+			li {
+				display: block;
+				width: 100%;
+			}
+		}
+	}
+
+/* Button */
+
+	input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	.button {
+		padding: 0;
+	}

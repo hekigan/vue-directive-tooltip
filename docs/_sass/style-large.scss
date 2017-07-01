@@ -1,0 +1,33 @@
+@import 'vars';
+@import 'mixins';
+
+/*
+	Read Only by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+$size-header: 20em;
+
+/* Basic */
+
+	body, input, select, textarea {
+		font-size: 11pt;
+	}
+	
+/* Header */
+
+	#header {
+		width: $size-header;
+	}
+	
+/* Wrapper */
+
+	#wrapper {
+		@if $side-header == 'right' {
+			padding-right: $size-header;
+		}
+		@else {
+			padding-left: $size-header;
+		}
+	}

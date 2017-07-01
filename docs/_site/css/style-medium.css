@@ -1,0 +1,115 @@
+/*
+	Read Only by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+
+/* Basic */
+
+	body, input, select, textarea {
+		font-size: 12pt;
+	}
+
+/* Image */
+
+	.image.left, .image.right {
+		max-width: 40%;
+	}
+
+		.image.left img, .image.right img {
+			width: 100%;
+		}
+
+/* Header */
+
+	#skel-layers-wrapper {
+		padding-top: 44px;
+	}
+
+	#header {
+		background: none;
+		bottom: auto;
+		left: auto;
+		position: relative;
+		right: auto;
+		top: auto;
+		width: 100%;
+	}
+
+		#header > footer {
+			bottom: auto;
+			left: auto;
+			margin: 1em 0 0 0;
+			position: relative;
+			right: auto;
+			top: auto;
+		}
+
+/* Wrapper */
+
+	#wrapper {
+		padding: 0;
+	}
+
+/* One */
+
+	#one:before {
+		height: 10em;
+	}
+
+/* Layers */
+
+	#titleBar {
+		background: #222;
+		color: #fff;
+		min-width: 320px;
+	}
+
+		#titleBar .title {
+			color: #fff;
+			display: block;
+			font-weight: 700;
+			height: 44px;
+			line-height: 44px;
+			padding: 0 1em;
+			width: 100%;
+			text-align: left;
+		}
+
+		#titleBar .toggle {
+			text-decoration: none;
+			height: 4em;
+			position: absolute;
+			top: 0;
+			width: 6em;
+			right: 0;
+		}
+
+			#titleBar .toggle:before {
+				-moz-osx-font-smoothing: grayscale;
+				-webkit-font-smoothing: antialiased;
+				font-family: FontAwesome;
+				font-style: normal;
+				font-weight: normal;
+				text-transform: none !important;
+			}
+
+			#titleBar .toggle:before {
+				background: #4acaa8;
+				color: #ffffff;
+				content: '\f0c9';
+				display: block;
+				font-size: 18px;
+				height: 44px;
+				line-height: 44px;
+				position: absolute;
+				text-align: center;
+				top: 0;
+				width: 64px;
+				right: 0;
+			}
+
+	#sidePanel {
+		background: #4acaa8;
+		color: #d1f1e9;
+	}
