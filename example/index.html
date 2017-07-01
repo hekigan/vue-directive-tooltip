@@ -25,6 +25,7 @@
                 border: 1px solid #004edc;
                 border-radius: 3px;
                 color: #fff;
+                padding: 6px 10px;
             }
 
             button:hover {
@@ -36,23 +37,27 @@
                 text-decoration: underline;
             }
 
+            .tooltip-content {
+                color: #fff;
+            }
+
             .vue-tooltip.tooltip-custom {
                 background-color: red;
             }
 
-            .vue-tooltip.tooltip-custom[x-placement^="top"] [x-arrow] {
+            .vue-tooltip.tooltip-custom[x-placement^="top"] .tooltip-arrow {
                 border-top-color: red;
             }
 
-            .vue-tooltip.tooltip-custom[x-placement^="bottom"] [x-arrow] {
+            .vue-tooltip.tooltip-custom[x-placement^="bottom"] .tooltip-arrow {
                 border-bottom-color: red;
             }
 
-            .vue-tooltip.tooltip-custom[x-placement^="left"] [x-arrow] {
+            .vue-tooltip.tooltip-custom[x-placement^="left"] .tooltip-arrow {
                 border-left-color: red;
             }
 
-            .vue-tooltip.tooltip-custom[x-placement^="right"] [x-arrow] {
+            .vue-tooltip.tooltip-custom[x-placement^="right"] .tooltip-arrow {
                 border-right-color: red;
             }
         </style>
@@ -86,6 +91,35 @@ import App from './App.vue';
                     </code></pre>
                 </p>
             </section>
+
+            <section>
+                <h3>Content</h3>
+
+                <h4>Basic</h4>
+                <p>
+                    Simple way <span class="tooltip-target" v-tooltip="'simple way'">to set text</span>
+                    <code>&lt;span v-tooltip="'simple way'"...</code>
+                </p>
+
+                <h4>Object format</h4>
+                <p>
+                    "Option" way <span class="tooltip-target" v-tooltip="{ content: 'option way' }">to set text</span>
+                    <code>&lt;span v-tooltip="{ content: 'option way' }"...</code>
+                </p>
+
+                <h4>Referencing an HTMLElement</h4>
+                <p>
+                    <span class="tooltip-target" v-tooltip="{ html: 'tooltipContent' }">to target an html element</span>
+                    <pre><code>
+&lt;span v-tooltip="{ html: 'id-of-html-content' }"...
+
+// somewhere else in your component
+
+&lt;div id="id-of-html-content"&gt;My great content&lt;/div&gt;
+                    </code></pre>
+                </p>
+            </section>
+
             <section>
                 <h3>Positioning</h3>
                 <p>
@@ -105,32 +139,60 @@ import App from './App.vue';
                     <code>&lt;span v-tooltip.left="'I am on the left'"...</code>
                 </p>
             </section>
+
+            <section>
+                <h3>Events</h3>
+
+                <p>
+                    There are several options to trigger the display of the tooltip:
+                </p>
+                <p>
+                    you can use a combination of these keywords: <strong>click, hover, focus</strong>
+                </p>
+                <p>
+                    Click <span class="tooltip-target" v-tooltip.click="{ content: 'show on click' }">to see the text</span>
+                </p>
+                <p>
+                    <code>&lt;span v-tooltip.click="{ content: 'Show on: click' }"...</code><br>
+                    <code>&lt;span v-tooltip.focus.hover="{ content: 'Show on: focus, hover' }"...</code>
+                </p>
+                <p>
+                    Click to open AND close <span class="tooltip-target" v-tooltip.click.manual="{ content: 'show/hide on click' }">(here is the tooltip)</span>
+                    <code>&lt;span v-tooltip.click.manual="{ content: 'Show on click' }"...</code>
+                </p>
+            </section>
+
             <section>
                 <h3>Options</h3>
-
-                <h4>Content</h4>
-                <p>
-                    Simple way <span class="tooltip-target" v-tooltip="'simple way'">to set text</span>
-                    <code>&lt;span v-tooltip="'simple way'"...</code>
-                </p>
-                <p>
-                    "Option" way <span class="tooltip-target" v-tooltip="{ content: 'option way' }">to set text</span>
-                    <code>&lt;span v-tooltip="{ content: 'option way' }"...</code>
-                </p>
                 
                 <h4>Visibility</h4>
-                <p>
-                    In case you need to hide a tooltip, you can use the <b class="tooltip-target" v-tooltip.top="{ content: 'change the visibility', visible: visibility }">visible</b> option
-                </p>
-                <p>
-                    <code>&lt;span v-tooltip="{ content: 'change the visibility', visible: <span v-text="visibility"></span> }"...</code>
-                </p>
                 <p>
                     <button @click="visibility = !visibility">
                         <span v-if="visibility">hide</span>
                         <span v-else>show</span>
                         tooltip
                     </button>
+                </p>
+                <p>
+                    In case you need to toggle a tooltip's visibility, you can use the <b class="tooltip-target" v-tooltip.top="{ content: 'change the visibility', visible: visibility }">visible</b> option
+                </p>
+                <p>
+                    <code>&lt;span v-tooltip="{ content: 'change the visibility', visible: <span v-text="visibility"></span> }"...</code>
+                </p>
+                <p>
+                    Toggle visibility AND disable triggers (hover, click, focus) <b class="tooltip-target" v-tooltip.top.notrigger="{ content: 'change the visibility', visible: visibility }">visible</b> option
+                </p>
+                <p>
+                    <code>&lt;span v-tooltip.notrigger="{ content: 'change the visibility', visible: <span v-text="visibility"></span> }"...</code>
+                </p>
+
+                <h4>Tooltip offset</h4>
+                <p>
+                    To change the offset of the tooltip relative to it's element:
+                    <b class="tooltip-target" v-tooltip.top="{ content: 'let\'s offset this', offset: 100 }">offset by 10px</b> option
+                </p>
+                <p>
+                    <code>&lt;span v-tooltip="{ content: 'let\'s offset this', offset: 10 }"...</code>
                 </p>
 
                 <h4>Custom CSS classes</h4>
@@ -147,24 +209,32 @@ import App from './App.vue';
     background-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^="top"] [x-arrow] {
+.vue-tooltip.tooltip-custom[x-placement^="top"] .tooltip-arrow {
     border-top-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^="bottom"] [x-arrow] {
+.vue-tooltip.tooltip-custom[x-placement^="bottom"] .tooltip-arrow {
     border-bottom-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^="left"] [x-arrow] {
+.vue-tooltip.tooltip-custom[x-placement^="left"] .tooltip-arrow {
     border-left-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^="right"] [x-arrow] {
+.vue-tooltip.tooltip-custom[x-placement^="right"] .tooltip-arrow {
     border-right-color: red;
 }
                     </code></pre>
                 </p>
             </section>
+        </div>
+
+        <div id="tooltipContent" class="tooltip-content">
+            <p>Let's use some HTML in this tooltip</p>
+            <ol>
+                <li>set <strong>v-tooltip</strong> with the <strong>html</strong> attribute</li>
+                <li><strong>html</strong> should be the <strong>id</strong> attribute of the html element you want to refer</li>
+            </ol>
         </div>
 
         <script>

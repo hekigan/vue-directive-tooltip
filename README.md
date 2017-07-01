@@ -8,14 +8,7 @@
 
 ### Usage
 
-```js
-// ES6
-import Tooltip from 'vue-directive-tooltip';
-Vue.use(Tooltip);
-
-// ES5
-require('vue-directive-tooltip');
-```
+Super simple
 
 ```html
 <span v-tooltip="'my text'">some text</span>
@@ -24,57 +17,12 @@ require('vue-directive-tooltip');
 It is recommended to also add the CSS file which is in the `./css/` folder.
 A SASS file is also included in the source for those who prefer fiddling.
 
-### Installation
+### Documentation
 
-Install via [yarn](https://github.com/yarnpkg/yarn)
+[Full documentation with examples](https://hekigan.github.io/vue-directive-tooltip/)
 
-	yarn add vue-directive-tooltip (--dev)
+![Alt text](https://hekigan.github.io/vue-directive-tooltip/images/github-screenshot.jpg "Vue directive tooltip - screenshot")
 
-or npm
-
-	npm install vue-directive-tooltip (--save-dev)
-
-
-### configuration
-
-```html
-<span v-tooltip="'my text'">some text</span>
-```
-or
-```html
-<span v-tooltip="{content: 'my text'}">some text</span>
-```
-
-**modifier**
-<br/> 📝 Change the position of the tooltip
-<br/> ℹ️ options: bottom (default) | top | left | right
-<br/> 💡 example
-```html
-<span v-tooltip.top="'my text'">some text</span>
-```
-**content**
-<br/> 📝 Set the text to display
-<br/> 💡 example
-```html
-<span v-tooltip="{ content: 'my text' }">some text</span>
-```
-**class**
-<br/> 📝 Append custom CSS class
-<br/> 💡 example
-```html
-<span v-tooltip="{ class: 'custom-class other-custom-class' }">some text</span>
-```
-**visible**
-<br/> 📝 Show/hide the tooltip
-<br/> ℹ️ options: true (default) | false
-<br/> 💡 example
-```html
-<span v-tooltip="{ content: 'my text', visible: true }">some text</span>
-```
-
-### Examples
-
-See [`example`](example/index.html) folder.
 
 ### Builds
 

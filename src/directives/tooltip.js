@@ -1,8 +1,7 @@
 /**
  * @author: laurent blanes <laurent.blanes@gmail.com>
  */
-import Utils from 'popper.js/dist/popper-utils';
-import Popper from 'popper.js';
+import Tooltip from 'tooltip.js';
 
 const BASE_CLASS = 'vue-tooltip';
 
@@ -24,15 +23,20 @@ const BASE_CLASS = 'vue-tooltip';
  * // toggle visibility
  * <div v-tooltip="{visible: false, content: 'my content'}">
  */
-export default {
+const tooltipDirective = {
     name: 'tooltip',
     config: {},
     install (Vue) {
         Vue.directive('tooltip', {
             bind (el, binding, vnode) {
-                let $popper = null;
-                let placement = 'bottom';
+            },
 
+            // On element inserted in the DOM
+            inserted (el, binding, vnode, oldVnode) {
+                let placement = 'bottom';
+                let trigger = [];
+
+                // POSITION
                 if (binding.modifiers.left) {
                     placement = 'left';
                 } else if (binding.modifiers.right) {
@@ -43,84 +47,158 @@ export default {
                     placement = 'bottom';
                 }
 
-                // wrapper
-                $popper = document.createElement('div');
-                $popper.setAttribute('class', BASE_CLASS);
-                Utils.setStyles($popper, {visibility: 'hidden'});
+                // TRIGGERS
+                if (binding.modifiers.notrigger) {
+                    trigger.push('manual');
+                } else {
+                    if (binding.modifiers.click) {
+                        trigger.push('click');
+                    }
 
-                // make arrow
-                let $arrow = document.createElement('div');
-                $arrow.setAttribute('x-arrow', '');
-                $popper.appendChild($arrow);
+                    if (binding.modifiers.hover) {
+                        trigger.push('hover');
+                    }
 
-                // make content container
-                let $content = document.createElement('div');
-                $content.setAttribute('class', 'vue-tooltip-content');
-                $popper.appendChild($content);
+                    if (binding.modifiers.focus) {
+                        trigger.push('focus');
+                    }
 
-                document.querySelector('body').appendChild($popper);
+                    if (trigger.length === 0) {
+                        trigger.push('hover', 'focus');
+                    }
 
-                const options = Object.assign({},
-                    binding.value,
-                    {
-                        placement,
+                    if (binding.modifiers.click && !binding.modifiers.manual) {
+                        tooltipDirective.onDocumentClick = (e) => {
+                            el.tooltip.hide();
+                        };
+                        document.addEventListener('click', tooltipDirective.onDocumentClick);
+                    }
+                }
+
+                // const popperOptions = Object.assign({},
+                //     binding.value,
+                //     {
+                //         placement,
+                //         onCreate (e) {
+                //             setProperties(el, binding);
+                //             setAttributes($tooltip, $content, el);
+                //         },
+                //         onUpdate (e) {
+                //             setAttributes($tooltip, $content, el);
+                //         }
+                //     }
+                // );
+                // el.popper = new Tooltip(el, $tooltip, options);
+
+                // OPTIONS
+                const tooltipOptions = {
+                    title: getContent(binding),
+                    html: Boolean(binding.value.html),
+                    placement,
+                    template: `<div class="${getCssClass(binding)}" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>`,
+                    trigger: trigger.join(' '),
+                    // offset: binding.value.offset,
+                    // Poppers specific options
+                    popperOptions: {
                         onCreate (e) {
-                            setProperties(el, binding);
-                            setAttributes($popper, $content, el);
+                            // console.warn('created');
+                            // document.getElementById(binding.value.html)
                         },
                         onUpdate (e) {
-                            setAttributes($popper, $content, el);
+                            // console.warn('updated');
+                            // document.getElementById(binding.value.html)
+                        },
+                        modifiers: {
+                            offset: {
+                                offset: binding.value.offset
+                            }
                         }
                     }
-                );
-                el.popper = new Popper(el, $popper, options);
+                };
+                // console.info(tooltipOptions);
+
+                // TOOLTIP CREATION
+                el.tooltip = new Tooltip(el, tooltipOptions);
+                // console.info(el.tooltip);
+                // console.info(el.tooltip.popperInstance.modifiers);
+
+                if (binding.value.html) {
+                    // TODO: refactor when possible
+                    // super dirty! Hate it, but for the moment I did not find a cleaner way with the current state of Tooltip.js
+                    // If I managed to use 'onCreate/onUpdate' hooks, I could make something a lot nicer.
+                    el.tooltip.show();
+                    el.tooltip.hide();
+                    el.tooltip.popperInstance.options.onUpdate = function (e) {
+                        // console.warn('onUpdate');
+                        // document.getElementById(binding.value.html)
+                    };
+                    // console.info(el.tooltip.popperInstance);
+                }
+
+                // Show/hide programmatically
+                toggleVisibility(el, binding.value.visible);
             },
-            inserted (el, binding, vnode, oldVnode) {
-                el.addEventListener('mouseover', onMouseOver);
-                el.addEventListener('mouseout', onMouseOut);
-                el.addEventListener('mouseleave', onMouseOut);
-            },
+
+            // On component updated
             componentUpdated (el, binding, vnode, oldVnode) {
-                setProperties(el, binding);
+                toggleVisibility(el, binding.value.visible);
+
+                if (el.tooltip.popperInstance) {
+                    const node = el.tooltip._tooltipNode;
+                    const contentWrapper = node.querySelector(el.tooltip.innerSelector);
+                    if (!el.tooltip.options.html) {
+                        contentWrapper.innerText = getContent(binding);
+                    // } else {
+                        // contentWrapper.innerHTML = getContent(binding);
+                    }
+                    el.tooltip.popperInstance.scheduleUpdate();
+                }
             },
+
+            // On component destroyed, do some cleanup
             unbind (el, binding, vnode, oldVnode) {
-                el.removeEventListener('mouseover', onMouseOver);
-                el.removeEventListener('mouseout', onMouseOut);
-                el.removeEventListener('mouseleave', onMouseOut);
-                document.querySelector('body').removeChild(el.popper.popper);
+                if (binding.modifiers.click && !binding.modifiers.manual) {
+                    document.removeEventListener('click', tooltipDirective.onDocumentClick);
+                }
+                el.tooltip.dispose();
             }
         });
-    }
+    },
+
+    // in the case of "manual" modifiers being used, set this function
+    onDocumentClick: null
 };
 
-function setProperties (el, binding) {
-    if (typeof binding.value === 'string') {
-        el.popper._class = '';
-        el.popper._content = binding.value;
-        el.popper._visible = true;
+function isObject (binding) {
+    return typeof binding.value === 'object';
+}
+
+function getContent (binding) {
+    if (isObject(binding)) {
+        if (binding.value.content !== undefined) {
+            return `${binding.value.content}`;
+        } else if (binding.value.html && document.getElementById(binding.value.html)) {
+            return document.getElementById(binding.value.html);
+        } else {
+            return '';
+        }
     } else {
-        el.popper._class = binding.value.class || '';
-        el.popper._content = binding.value.content;
-        el.popper._visible = binding.value.visible !== false;
+        return `${binding.value}`;
     }
 }
 
-function setAttributes ($popper, $content, el) {
-    $content.innerHTML = el.popper._content;
-    Utils.setStyles(el.popper.popper, {
-        display: el.popper._visible ? 'inline-block' : 'none'
-    });
-    const classes = `${BASE_CLASS} ${el.popper._class}`;
-    $popper.setAttribute('class', classes.trim());
+function getCssClass (binding) {
+    if (isObject(binding) && binding.value.class) {
+        return `${BASE_CLASS} ${binding.value.class}`;
+    } else {
+        return BASE_CLASS;
+    }
 }
 
-function onMouseOver (e) {
-    const el = e.currentTarget;
-    Utils.setStyles(el.popper.popper, {visibility: 'visible'});
-    el.popper.update();
+function toggleVisibility (el, status) {
+    if (typeof status === 'boolean') {
+        status ? el.tooltip.show() : el.tooltip.hide();
+    }
 }
 
-function onMouseOut (e) {
-    const el = e.currentTarget;
-    Utils.setStyles(el.popper.popper, {visibility: 'hidden'});
-}
+export default tooltipDirective;

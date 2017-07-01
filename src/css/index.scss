@@ -4,7 +4,7 @@ $popper-background-color: #000 !default;
     background-color: $popper-background-color;
     box-sizing: border-box;
     color: #fff;
-    min-width: 120px;
+    // min-width: 120px;
     max-width: 320px;
     padding: 6px 10px;
     border-radius: 3px;
@@ -29,7 +29,7 @@ $popper-background-color: #000 !default;
     //  }
     // }
     
-    [x-arrow] {
+    .tooltip-arrow {
         content: '';
         width: 0;
         height: 0;
@@ -41,7 +41,7 @@ $popper-background-color: #000 !default;
     &[x-placement^="top"] {
         margin-bottom: 5px;
         
-        [x-arrow] {
+        .tooltip-arrow {
             border-width: 5px 5px 0 5px;
             border-color: $popper-background-color transparent transparent transparent;
             bottom: -5px;
@@ -53,7 +53,7 @@ $popper-background-color: #000 !default;
     &[x-placement^="bottom"] {
         margin-top: 5px;
         
-        [x-arrow] {
+        .tooltip-arrow {
             border-width: 0 5px 5px 5px;
             border-color: transparent transparent $popper-background-color transparent;
             top: -5px;
@@ -65,7 +65,7 @@ $popper-background-color: #000 !default;
     &[x-placement^="right"] {
         margin-left: 5px;
         
-        [x-arrow] {
+        .tooltip-arrow {
             border-width: 5px 5px 5px 0;
             border-color: transparent $popper-background-color transparent transparent;
             left: -5px;
@@ -77,7 +77,7 @@ $popper-background-color: #000 !default;
     &[x-placement^="left"] {
         margin-right: 5px;
         
-        [x-arrow] {
+        .tooltip-arrow {
             border-width: 5px 0 5px 5px;
             border-color: transparent transparent transparent $popper-background-color;
             right: -5px;
