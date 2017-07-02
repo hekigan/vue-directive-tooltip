@@ -7,7 +7,7 @@
 		<meta name="description" content="vue directive tooltip (with popper.js) - tooltips made simple" />
 		<meta name="keywords" content="vue, directive, tooltip, popper, javascript" />
 		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
-		<script src="https://unpkg.com/vue@2.2.6/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
         <script src="/vue-directive-tooltip/js/vueDirectiveTooltip.js"></script>
 		<script src="/vue-directive-tooltip/js/jquery.min.js"></script>
 		<script src="/vue-directive-tooltip/js/jquery.scrollzer.min.js"></script>
@@ -72,18 +72,34 @@
             </header>
             
             <h4>Using Webpack, Rollup, etc...</h4>
+            <h5>1. using npm or yarn</h5>
             <p>
-                <code>Vue.use()</code> is called from the script, so you don't need to care about it.
+                install the script like so: <br>
+                <code>npm install vue-directive-tooltip --save</code> <br>
+                or <br>
+                <code>yarn add vue-directive-tooltip</code>
             </p>
-            <div>
+
+            <h5>2. use the script with Vue</h5>
+            <p>
                 <noscript><pre>// in your js file
 import Vue from &#39;vue&#39;;
 import Tooltip from &#39;vue-directive-tooltip&#39;;  // or require(&#39;vue-directive-tooltip&#39;);</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=install-webpack.js"> </script>
-            </div>
+            </p>
+            <p>
+                <code>Vue.use()</code> is called from the script, so you don't need to care about it.
+            </p>
+
+            <h5>3. do not forget the css!</h5>
+            <p>
+                You can either get the raw css <a href="https://raw.githubusercontent.com/hekigan/vue-directive-tooltip/master/css/index.css" target="_blank">clicking here</a>, <br>
+                or import it in your SASS/SCSS file <code>@import "~vue-directive-tooltip";</code> (in case of webpack, the <code>~</code> represents the node_modules folder)
+            </p>
             
             <h4>Using script tag</h4>
             <p>
-                When using ES5, don't forget to copy the css.
+                When using ES5, don't forget to copy the css.  <br>
+                raw css: <a href="https://raw.githubusercontent.com/hekigan/vue-directive-tooltip/master/css/index.css" target="_blank">download</a>
             </p>
             <div>
                 <noscript><pre>&lt;link rel=&quot;stylesheet&quot; href=&quot;path/to/css/vueDirectiveTooltip.css&quot;&gt;
@@ -101,7 +117,7 @@ import Tooltip from &#39;vue-directive-tooltip&#39;;  // or require(&#39;vue-dir
             </header>
             
             <h4>Basic</h4>
-            <p>
+            <p id="usage-basic">
                 Example: <a href="#" @click.prevent v-tooltip="'basic one'">Tooltip</a>
             </p>
             <div>
@@ -112,7 +128,7 @@ import Tooltip from &#39;vue-directive-tooltip&#39;;  // or require(&#39;vue-dir
             </p>
             
             <h4>Using an options object</h4>
-            <p>
+            <p id="usage-options">
                 Example: <a href="#" @click.prevent v-tooltip="{ content: 'options object' }">Tooltip</a>
             </p>
             <div>
@@ -120,7 +136,7 @@ import Tooltip from &#39;vue-directive-tooltip&#39;;  // or require(&#39;vue-dir
             </div>
             
             <h4>Referencing and HTML element</h4>
-            <p>
+            <p id="usage-element">
                 Example: <a href="#" @click.prevent v-tooltip="{ html: 'tooltipContent' }">the target is an html element</a>
             </p>
             <div id="tooltipContent">
@@ -146,25 +162,25 @@ import Tooltip from &#39;vue-directive-tooltip&#39;;  // or require(&#39;vue-dir
             <p>
                 4 different positions are available: bottom (default) | top | left | right
             </p>
-            <p>
+            <p id="position-default">
                 Default positioning: <a href="#" @click.prevent v-tooltip="'bottom'">bottom tooltip</a>
             </p>
             <div>
                 <noscript><pre>&lt;span v-tooltip=&quot;&#39;bottom&#39;&quot;&gt;Tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-default.vue"> </script>
             </div>
-            <p>
+            <p id="position-top">
                 Top positioning: <a href="#" @click.prevent v-tooltip.top="'top'">top tooltip</a>
             </p>
             <div>
                 <noscript><pre>&lt;span v-tooltip.top=&quot;&#39;top&#39;&quot;&gt;top tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-top.vue"> </script>
             </div>
-            <p>
+            <p id="position-left">
                 Left positioning: <a href="#" @click.prevent v-tooltip.left="'left'">left tooltip</a>
             </p>
             <div>
                 <noscript><pre>&lt;span v-tooltip.left=&quot;&#39;left&#39;&quot;&gt;left tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-left.vue"> </script>
             </div>
-            <p>
+            <p id="position-right">
                 Right positioning: <a href="#" @click.prevent v-tooltip.right="'right'">right tooltip</a>
             </p>
             <div>
@@ -184,19 +200,19 @@ import Tooltip from &#39;vue-directive-tooltip&#39;;  // or require(&#39;vue-dir
                 There are several options to trigger the display of the tooltip: <br>
                 you can use a combination of these keywords: click | hover | focus
             </p>
-            <p>
+            <p id="events-click">
                 single event: <a href="#" @click.prevent v-tooltip.click="'Show on: click'">click trigger</a>
             </p>
             <div>
                 <noscript><pre>&lt;span v-tooltip.click=&quot;&#39;Show on: click&#39;&quot;&gt;click trigger&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=triggers-click.vue"> </script>
             </div>
-            <p>
+            <p id="events-combi">
                 or even a combination: <a href="#" @click.prevent v-tooltip.hover.focus="'Show on: hover.focus'">hover.focus triggers together</a>
             </p>
             <div>
                 <noscript><pre>&lt;span v-tooltip.hover.focus=&quot;&#39;Show on: hover.focus&#39;&quot;&gt;hover.focus triggers together&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=triggers-combination.vue"> </script>
             </div>
-            <p>
+            <p id="events-manual">
                 By the default, the <code>click</code> trigger will close when clicking anywhere on the page. <br>
                 In case you want the tooltip to close when clicking again on the same element, there is an extra option.
                 click event: <a href="#" @click.prevent v-tooltip.click.manual="'click + manual trigger'">click + manual trigger</a>
@@ -219,7 +235,7 @@ import Tooltip from &#39;vue-directive-tooltip&#39;;  // or require(&#39;vue-dir
                 For that, you need to use the modifier <code>.notrigger</code> + the options object attribute <code>visible</code> <br>
                 <code>&lt;a v-tooltip.notrigger="{ content: '...', visible: visibility }"</code>
             </p>
-            <p>
+            <p id="prog">
                 <a @click.prevent v-tooltip.right.notrigger="{ content: 'change the visibility', visible: visibility }">change the visibility with the button below</a><br>
                 <button @click="visibility = !visibility">
                     <span v-if="visibility">hide tooltip</span>
@@ -261,7 +277,7 @@ export default {
                 Let's personalize a bit this tooltip! <br>
                 Wants some red? Here is how you do it.
             </p>
-            <p>
+            <p id="custom-class">
                 Example: <a @click.prevent v-tooltip="{ content: 'custom class', class: 'tooltip-custom tooltip-other-custom' }">tooltip appearance</a>
             </p>
             <p>
@@ -301,6 +317,21 @@ export default {
         </div>
     </section>
 
+    <script>
+        new Vue({ el: '#usage-basic', data() { return {}; } });
+        new Vue({ el: '#usage-options', data() { return {}; } });
+        new Vue({ el: '#usage-element', data() { return {}; } });
+        new Vue({ el: '#position-default', data() { return {}; } });
+        new Vue({ el: '#position-top', data() { return {}; } });
+        new Vue({ el: '#position-left', data() { return {}; } });
+        new Vue({ el: '#position-right', data() { return {}; } });
+        new Vue({ el: '#events-click', data() { return {}; } });
+        new Vue({ el: '#events-combi', data() { return {}; } });
+        new Vue({ el: '#events-manual', data() { return {}; } });
+        new Vue({ el: '#prog', data() { return { visibility: false }; } });
+        new Vue({ el: '#custom-class', data() { return {}; } });
+    </script>
+
             </div>
             <!-- Footer -->
     <section id="footer">
@@ -312,12 +343,5 @@ export default {
     </section>
 
 		</div>
-        <script>
-            new Vue({ el: '#main', data() {
-                return {
-                    visibility: false
-                };
-            } });
-        </script>
 	</body>
 </html>
