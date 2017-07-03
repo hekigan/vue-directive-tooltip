@@ -29,14 +29,18 @@ layout: default
             <p>
                 {% gist hekigan/a614757bc63f85fd0401c95e16cf96cc install-webpack.js %}
             </p>
-            <p>
-                <code>Vue.use()</code> is called from the script, so you don't need to care about it.
-            </p>
 
             <h5>3. do not forget the css!</h5>
             <p>
-                You can either get the raw css <a href="https://raw.githubusercontent.com/hekigan/vue-directive-tooltip/master/css/index.css" target="_blank">clicking here</a>, <br>
-                or import it in your SASS/SCSS file <code>@import "~vue-directive-tooltip";</code> (in case of webpack, the <code>~</code> represents the node_modules folder)
+                You can either get the raw css <a href="https://raw.githubusercontent.com/hekigan/vue-directive-tooltip/master/css/index.css" target="_blank">clicking here</a>
+            </p>
+            <p>
+                or import the <b>css</b> from node_modules (in case of webpack, the <code>~</code> represents the node_modules folder): <br/>
+                <code>@import "~vue-directive-tooltip/css/index.css";</code>
+            </p>
+            <p>
+                or the scss directly: <br/>
+                <code>@import "~vue-directive-tooltip/src/css/index.scss";</code>
             </p>
             
             <h4>Using script tag</h4>
