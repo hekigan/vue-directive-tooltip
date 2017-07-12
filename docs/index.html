@@ -101,13 +101,19 @@ layout: default
             </header>
             
             <p>
-                4 different positions are available: bottom (default) | top | left | right
+                5 different positions are available: auto (default) | bottom | top | left | right
             </p>
             <p id="position-default">
-                Default positioning: <a href="#" @click.prevent v-tooltip="'bottom'">bottom tooltip</a>
+                Default positioning: <a href="#" @click.prevent v-tooltip="'auto'">auto tooltip</a>
             </p>
             <div>
                 {% gist hekigan/a614757bc63f85fd0401c95e16cf96cc positioning-default.vue %}
+            </div>
+            <p id="position-bottom">
+                Bottom positioning: <a href="#" @click.prevent v-tooltip.bottom="'bottom'">bottom tooltip</a>
+            </p>
+            <div>
+                {% gist hekigan/a614757bc63f85fd0401c95e16cf96cc positioning-bottom.vue %}
             </div>
             <p id="position-top">
                 Top positioning: <a href="#" @click.prevent v-tooltip.top="'top'">top tooltip</a>
