@@ -2853,9 +2853,9 @@ pluralize@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
 
-popper.js@^1.0.2, popper.js@^1.9.5:
-  version "1.10.6"
-  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.10.6.tgz#0d65754f010cd1d4a2fc6c726eca9f117b59d597"
+popper.js@1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.9.3.tgz#7b34209dd6fe354f0b5d021e98f90ef4b54e6962"
 
 postcss-calc@^5.2.0:
   version "5.3.1"
@@ -4009,12 +4009,6 @@ to-fast-properties@^1.0.1:
 token-stream@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/token-stream/-/token-stream-0.0.1.tgz#ceeefc717a76c4316f126d0b9dbaa55d7e7df01a"
-
-tooltip.js@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/tooltip.js/-/tooltip.js-1.1.4.tgz#17337f22065fc04d4a456429ce122dbf184bd861"
-  dependencies:
-    popper.js "^1.0.2"
 
 tough-cookie@~2.3.0:
   version "2.3.2"

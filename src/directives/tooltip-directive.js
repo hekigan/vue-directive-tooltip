@@ -120,7 +120,7 @@ function isObject (value) {
  * @return Boolean
  */
 function isElement (value) {
-    return value instanceof Element;
+    return value instanceof window.Element;
 }
 
 /**

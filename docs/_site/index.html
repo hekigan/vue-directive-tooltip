@@ -171,7 +171,7 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
                 Default positioning: <a href="#" @click.prevent v-tooltip="'auto'">auto tooltip</a>
             </p>
             <div>
-                <noscript><pre>&lt;span v-tooltip=&quot;&#39;bottom&#39;&quot;&gt;Tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-default.vue"> </script>
+                <noscript><pre>&lt;span v-tooltip=&quot;&#39;auto positionning&#39;&quot;&gt;Tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-default.vue"> </script>
             </div>
             <p id="position-bottom">
                 Bottom positioning: <a href="#" @click.prevent v-tooltip.bottom="'bottom'">bottom tooltip</a>
@@ -334,6 +334,7 @@ export default {
         new Vue({ el: '#usage-element', data() { return {}; } });
         new Vue({ el: '#position-default', data() { return {}; } });
         new Vue({ el: '#position-top', data() { return {}; } });
+        new Vue({ el: '#position-bottom', data() { return {}; } });
         new Vue({ el: '#position-left', data() { return {}; } });
         new Vue({ el: '#position-right', data() { return {}; } });
         new Vue({ el: '#events-click', data() { return {}; } });
