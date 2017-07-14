@@ -1,6 +1,6 @@
 {
   "name": "vue-directive-tooltip",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Vue.js tooltip directive ",
   "main": "cjs/index.js",
   "browser": "dist/vueDirectiveTooltip.js",
