@@ -29,7 +29,7 @@
 		-ms-transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 		transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 		border-bottom: solid 1px #e4e4e4;
-		color: inherit;
+		color: #0fb388;
 		text-decoration: none;
 	}
 
@@ -118,7 +118,7 @@
 		padding: 0.5em 0 0.5em 2em;
 	}
 
-	code {
+	/* code {
 		background: #555;
 		border-radius: 5px;
 		color: #fff;
@@ -132,7 +132,7 @@
 			color: #666;
 			margin: 0;
 			padding: 0;
-		}
+		} */
 
 	.align-left {
 		text-align: left;

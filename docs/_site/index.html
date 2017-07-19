@@ -7,22 +7,27 @@
 		<meta name="description" content="vue directive tooltip (with popper.js) - tooltips made simple" />
 		<meta name="keywords" content="vue, directive, tooltip, popper, javascript" />
 		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
-		<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+		
+		
+			<link rel="stylesheet" href="/vue-directive-tooltip/css/skel.css" />
+			<link rel="stylesheet" href="/vue-directive-tooltip/css/style.css" />
+			<link rel="stylesheet" href="/vue-directive-tooltip/css/style-xlarge.css" />
+		
+		<link rel="stylesheet" href="/vue-directive-tooltip/css/index.css" />
+		<link rel="stylesheet" href="/vue-directive-tooltip/css/prism.css" />
+		
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+
+		<!-- <script src="https://unpkg.com/vue@latest/dist/vue.js"></script> -->
+        <script src="/vue-directive-tooltip/js/vue.js"></script>
         <script src="/vue-directive-tooltip/js/vueDirectiveTooltip.js"></script>
+		<script src="/vue-directive-tooltip/js/prism.js"></script>
 		<script src="/vue-directive-tooltip/js/jquery.min.js"></script>
 		<script src="/vue-directive-tooltip/js/jquery.scrollzer.min.js"></script>
 		<script src="/vue-directive-tooltip/js/jquery.scrolly.min.js"></script>
 		<script src="/vue-directive-tooltip/js/skel.min.js"></script>
 		<script src="/vue-directive-tooltip/js/skel-layers.min.js"></script>
 		<script src="/vue-directive-tooltip/js/init.js"></script>
-		<noscript>
-			<link rel="stylesheet" href="/vue-directive-tooltip/css/skel.css" />
-			<link rel="stylesheet" href="/vue-directive-tooltip/css/style.css" />
-			<link rel="stylesheet" href="/vue-directive-tooltip/css/style-xlarge.css" />
-		</noscript>
-		<link rel="stylesheet" href="/vue-directive-tooltip/css/index.css" />
-		<!--<link rel="stylesheet" href="/vue-directive-tooltip/css/highlight-syntax.css" />-->
-		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
 	</head>
 		
     <body>
@@ -57,7 +62,8 @@
 
             <!-- Main -->
             <div id="main">
-                    <div id="banner">
+                <div id="app">
+    <div id="banner">
         <header>
             <h2>Vue Directive Tooltip</h2>
             <h4>a directive for Vue.js</h4>
@@ -81,24 +87,25 @@
             </p>
 
             <h5>2. use the script with Vue</h5>
-            <p>
-                <noscript><pre>// in your js file
-import Vue from &#39;vue&#39;;
-import Tooltip from &#39;vue-directive-tooltip&#39;;
-Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=install-webpack.js"> </script>
-            </p>
+            <prism lang="javascript">
+// in your js file
+import Vue from 'vue';
+import Tooltip from 'vue-directive-tooltip';
+import Tooltip from 'vue-directive-tooltip/css/index.css';
+Vue.use(Tooltip);
+            </prism>
 
-            <h5>3. do not forget the css!</h5>
+            <h5>3. do not forget the css if you do not want to use the above import!</h5>
             <p>
                 You can either get the raw css <a href="https://raw.githubusercontent.com/hekigan/vue-directive-tooltip/master/css/index.css" target="_blank">clicking here</a>
             </p>
             <p>
                 or import the <b>css</b> from node_modules (in case of webpack, the <code>~</code> represents the node_modules folder): <br/>
-                <code>@import "~vue-directive-tooltip/css/index.css";</code>
+                <prism lang="css">@import "~vue-directive-tooltip/css/index.css";</prism>
             </p>
             <p>
                 or the scss directly: <br/>
-                <code>@import "~vue-directive-tooltip/src/css/index.scss";</code>
+                <prism lang="css">@import "~vue-directive-tooltip/src/css/index.scss";</prism>
             </p>
             
             <h4>Using script tag</h4>
@@ -106,11 +113,11 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
                 When using ES5, don't forget to copy the css.  <br>
                 raw css: <a href="https://raw.githubusercontent.com/hekigan/vue-directive-tooltip/master/css/index.css" target="_blank">download</a>
             </p>
-            <div>
-                <noscript><pre>&lt;link rel=&quot;stylesheet&quot; href=&quot;path/to/css/vueDirectiveTooltip.css&quot;&gt;
-&lt;script src=&quot;https://unpkg.com/vue@latest/dist/vue.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;path/to/vueDirectiveTooltip.js&quot;&gt;&lt;/script&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=install-script.html"> </script>
-            </div>
+            <prism>
+&lt;link rel="stylesheet" href="path/to/css/vueDirectiveTooltip.css">
+&lt;script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+&lt;script src="path/to/vueDirectiveTooltip.js"></script>
+            </prism>
         </div>
     </section>
 
@@ -125,9 +132,7 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
             <p id="usage-basic">
                 Example: <a href="#" @click.prevent v-tooltip="'basic one'">Tooltip</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip=&quot;&#39;basic one&#39;&quot;&gt;Tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=basic.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip="'basic one'">Tooltip&lt;/span></prism>
             <p>
                 Please be careful of the <strong>single quotes</strong> inside the <strong>double quote</strong>.
             </p>
@@ -136,9 +141,7 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
             <p id="usage-options">
                 Example: <a href="#" @click.prevent v-tooltip="{ content: 'options object' }">Tooltip</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip=&quot;{ content: &#39;options object&#39; }&quot;&gt;Tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=basic-options.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip="{ content: 'options object' }">Tooltip&lt;/span></prism>
             
             <h4>Referencing and HTML element</h4>
             <p id="usage-element">
@@ -147,13 +150,13 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
             <div id="tooltipContent">
                 <span>this content is in an <strong>HTML</strong> tag</span>
             </div>
-            <div>
-                <noscript><pre>&lt;span v-tooltip=&quot;{ html: &#39;tooltipContent&#39; }&quot;&gt;the target is an html element&lt;/span&gt;
+            <prism>
+&lt;span v-tooltip="{ html: 'tooltipContent' }">the target is an html element&lt;/span>
 
-&lt;div id=&quot;tooltipContent&quot;&gt;
-    &lt;p&gt;this content is in an &lt;strong&gt;HTML&lt;/strong&gt; tag&lt;/p&gt;
-&lt;/div&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=basic-options-html.vue"> </script>
-            </div>
+&lt;div id="tooltipContent">
+    &lt;p>this content is in an &lt;strong>HTML&lt;/strong> tag&lt;/p>
+&lt;/div>
+            </prism>
         </div>
     </section>
 
@@ -170,33 +173,27 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
             <p id="position-default">
                 Default positioning: <a href="#" @click.prevent v-tooltip="'auto'">auto tooltip</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip=&quot;&#39;auto positionning&#39;&quot;&gt;Tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-default.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip="'auto positionning'">Tooltip&lt;/span></prism>
+            
             <p id="position-bottom">
                 Bottom positioning: <a href="#" @click.prevent v-tooltip.bottom="'bottom'">bottom tooltip</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip.bottom=&quot;&#39;bottom&#39;&quot;&gt;bottom tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-bottom.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip.bottom="'bottom'">bottom tooltip&lt;/span></prism>
+            
             <p id="position-top">
                 Top positioning: <a href="#" @click.prevent v-tooltip.top="'top'">top tooltip</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip.top=&quot;&#39;top&#39;&quot;&gt;top tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-top.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip.top="'top'">top tooltip&lt;/span></prism>
+
             <p id="position-left">
                 Left positioning: <a href="#" @click.prevent v-tooltip.left="'left'">left tooltip</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip.left=&quot;&#39;left&#39;&quot;&gt;left tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-left.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip.left="'left'">left tooltip&lt;/span></prism>
+
             <p id="position-right">
                 Right positioning: <a href="#" @click.prevent v-tooltip.right="'right'">right tooltip</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip.right=&quot;&#39;right&#39;&quot;&gt;right tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=positioning-right.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip.right="'right'">right tooltip&lt;/span></prism>
         </div>
     </section>
 
@@ -214,23 +211,19 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
             <p id="events-click">
                 single event: <a href="#" @click.prevent v-tooltip.click="'Show on: click'">click trigger</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip.click=&quot;&#39;Show on: click&#39;&quot;&gt;click trigger&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=triggers-click.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip.click="'Show on: click'">click trigger&lt;/span></prism>
+
             <p id="events-combi">
                 or even a combination: <a href="#" @click.prevent v-tooltip.hover.focus="'Show on: hover.focus'">hover.focus triggers together</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip.hover.focus=&quot;&#39;Show on: hover.focus&#39;&quot;&gt;hover.focus triggers together&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=triggers-combination.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip.hover.focus="'Show on: hover.focus'">hover.focus triggers together&lt;/span></prism>
+            
             <p id="events-manual">
                 By the default, the <code>click</code> trigger will close when clicking anywhere on the page. <br>
                 In case you want the tooltip to close when clicking again on the same element, there is an extra option.
                 click event: <a href="#" @click.prevent v-tooltip.click.manual="'click + manual trigger'">click + manual trigger</a>
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip.click.manual=&quot;&#39;click + manual trigger&#39;&quot;&gt;click + manual trigger&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=triggers-click-manual.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip.click.manual="'click + manual trigger'">click + manual trigger&lt;/span></prism>
         </div>
     </section>
 
@@ -253,18 +246,18 @@ Vue.use(Tooltip);</pre></noscript><script src="https://gist.github.com/hekigan/a
                     <span v-else>show tooltip</span>
                 </button>
             </p>
-            <div>
-                <noscript><pre>&lt;template&gt;
-  &lt;div&gt;
-    &lt;a v-tooltip.notrigger=&quot;{ content: &#39;change the visibility&#39;, visible: visibility }&quot;&gt;change the visibility with the button below&lt;/a&gt;&lt;br&gt;
-    &lt;button @click=&quot;visibility = !visibility&quot;&gt;
-        &lt;span v-if=&quot;visibility&quot;&gt;hide tooltip&lt;/span&gt;
-        &lt;span v-else&gt;show tooltip&lt;/span&gt;
-    &lt;/button&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
+            <prism>
+&lt;template>
+  &lt;div>
+    &lt;a v-tooltip.notrigger="{ content: 'change the visibility', visible: visibility }">change the visibility with the button below&lt;/a>&lt;br>
+    &lt;button @click="visibility = !visibility">
+        &lt;span v-if="visibility">hide tooltip&lt;/span>
+        &lt;span v-else>show tooltip&lt;/span>
+    &lt;/button>
+  &lt;/div>
+&lt;/template>
 
-&lt;script&gt;
+&lt;script>
 export default {
   data() {
     return {
@@ -272,8 +265,8 @@ export default {
     };
   }
 };
-&lt;/script&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=programmatic.vue"> </script>
-            </div>
+&lt;/script>
+            </prism>
         </div>
     </section>
 
@@ -298,50 +291,57 @@ export default {
             <p>
                 We have to account for the arrow color also depending on the tooltip's position.
             </p>
-            <div>
-                <noscript><pre>.vue-tooltip.tooltip-custom {
+            <prism lang="css">
+.vue-tooltip.tooltip-custom {
     background-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^=&quot;top&quot;] .tooltip-arrow {
+.vue-tooltip.tooltip-custom[x-placement^="top"] .tooltip-arrow {
     border-top-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^=&quot;bottom&quot;] .tooltip-arrow {
+.vue-tooltip.tooltip-custom[x-placement^="bottom"] .tooltip-arrow {
     border-bottom-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^=&quot;left&quot;] .tooltip-arrow {
+.vue-tooltip.tooltip-custom[x-placement^="left"] .tooltip-arrow {
     border-left-color: red;
 }
 
-.vue-tooltip.tooltip-custom[x-placement^=&quot;right&quot;] .tooltip-arrow {
+.vue-tooltip.tooltip-custom[x-placement^="right"] .tooltip-arrow {
     border-right-color: red;
-}</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=custom-css.css"> </script>
-            </div>
+}
+            </prism>
+
             <p>
                 2. in your directive options object, specify your css class name(s)
             </p>
-            <div>
-                <noscript><pre>&lt;span v-tooltip=&quot;{ content: &#39;custom class&#39;, class: &#39;tooltip-custom tooltip-other-custom&#39; }&quot;&gt;custom tooltip&lt;/span&gt;</pre></noscript><script src="https://gist.github.com/hekigan/a614757bc63f85fd0401c95e16cf96cc.js?file=custom-css.vue"> </script>
-            </div>
+            <prism>&lt;span v-tooltip="{ content: 'custom class', class: 'tooltip-custom tooltip-other-custom' }">custom tooltip&lt;/span></prism>
+            
         </div>
     </section>
+</div>
 
     <script>
-        new Vue({ el: '#usage-basic', data() { return {}; } });
-        new Vue({ el: '#usage-options', data() { return {}; } });
-        new Vue({ el: '#usage-element', data() { return {}; } });
-        new Vue({ el: '#position-default', data() { return {}; } });
-        new Vue({ el: '#position-top', data() { return {}; } });
-        new Vue({ el: '#position-bottom', data() { return {}; } });
-        new Vue({ el: '#position-left', data() { return {}; } });
-        new Vue({ el: '#position-right', data() { return {}; } });
-        new Vue({ el: '#events-click', data() { return {}; } });
-        new Vue({ el: '#events-combi', data() { return {}; } });
-        new Vue({ el: '#events-manual', data() { return {}; } });
-        new Vue({ el: '#prog', data() { return { visibility: false }; } });
-        new Vue({ el: '#custom-class', data() { return {}; } });
+        Vue.component('Prism', {
+            props: ['lang'],
+            template: `<pre><code :class="language"><slot/></code></pre>`,
+            computed: {
+                language () {
+                    return (this.lang) ? `language-${this.lang}` : 'language-html';
+                }
+            }
+        });
+
+        new Vue({ 
+            el: '#app',
+            data() {
+                return { visibility: false };
+            },
+            components: {
+                // Prism: window.Prism
+            }
+        });
     </script>
 
 
@@ -354,7 +354,6 @@ export default {
             </ul>
         </div>
     </section>
-
 		</div>
 	</body>
 </html>
