@@ -1,7 +1,7 @@
 import Utils from 'popper.js/dist/popper-utils';
 import Popper from 'popper.js';
 
-const BASE_CLASS = 'tooltip';
+const BASE_CLASS = 'h-tooltip';
 const PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 
 const DEFAULT_OPTIONS = {
