@@ -1038,6 +1038,15 @@
 					border-top: 0;
 				}
 
+	.github {
+		font-size: 1.2em;
+	}
+
+	.github .icon .label {
+		display: inline;
+		margin-left: 10px;
+	}
+
 /* Wrapper */
 
 	#wrapper {

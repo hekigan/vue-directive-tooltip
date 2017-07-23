@@ -3229,7 +3229,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var BASE_CLASS = 'tooltip';
+var BASE_CLASS = 'h-tooltip';
 var PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 
 var DEFAULT_OPTIONS = {
