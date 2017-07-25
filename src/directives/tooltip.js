@@ -167,9 +167,13 @@ export default class Tootlip {
             this.tooltip.options.title = content;
             wrapper.textContent = content;
         } else if (isElement(content)) {
+            var clonedNode = content.cloneNode(true);
             wrapper.innerHTML = '';
-            this.tooltip.options.title = content;
-            wrapper.appendChild(content);
+            this.tooltip.options.title = clonedNode;
+            wrapper.appendChild(clonedNode);
+            if (isElement(content.parentNode)) {
+                content.parentNode.removeChild(content);
+            }
         } else {
             console.error('unsupported content type', content);
         }
