@@ -3407,9 +3407,13 @@ var Tootlip = function () {
             this.tooltip.options.title = _content;
             wrapper.textContent = _content;
         } else if (isElement$1(_content)) {
+            var clonedNode = _content.cloneNode(true);
             wrapper.innerHTML = '';
-            this.tooltip.options.title = _content;
-            wrapper.appendChild(_content);
+            this.tooltip.options.title = clonedNode;
+            wrapper.appendChild(clonedNode);
+            if (isElement$1(_content.parentNode)) {
+                _content.parentNode.removeChild(_content);
+            }
         } else {
             console.error('unsupported content type', _content);
         }

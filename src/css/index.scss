@@ -43,7 +43,10 @@ $popper-background-color: #000 !default;
         
         .tooltip-arrow {
             border-width: 5px 5px 0 5px;
-            border-color: $popper-background-color transparent transparent transparent;
+            border-top-color: $popper-background-color;
+            border-bottom-color: transparent !important;
+            border-left-color: transparent !important;
+            border-right-color: transparent !important;
             bottom: -5px;
             margin-top: 0;
             margin-bottom: 0;
@@ -55,7 +58,10 @@ $popper-background-color: #000 !default;
         
         .tooltip-arrow {
             border-width: 0 5px 5px 5px;
-            border-color: transparent transparent $popper-background-color transparent;
+            border-bottom-color: $popper-background-color;
+            border-top-color: transparent !important;
+            border-left-color: transparent !important;
+            border-right-color: transparent !important;
             top: -5px;
             margin-top: 0;
             margin-bottom: 0;
@@ -67,7 +73,10 @@ $popper-background-color: #000 !default;
         
         .tooltip-arrow {
             border-width: 5px 5px 5px 0;
-            border-color: transparent $popper-background-color transparent transparent;
+            border-right-color: $popper-background-color;
+            border-top-color: transparent !important;
+            border-left-color: transparent !important;
+            border-bottom-color: transparent !important;
             left: -5px;
             margin-left: 0;
             margin-right: 0;
@@ -79,7 +88,10 @@ $popper-background-color: #000 !default;
         
         .tooltip-arrow {
             border-width: 5px 0 5px 5px;
-            border-color: transparent transparent transparent $popper-background-color;
+            border-left-color: $popper-background-color;
+            border-top-color: transparent !important;
+            border-right-color: transparent !important;
+            border-bottom-color: transparent !important;
             right: -5px;
             margin-left: 0;
             margin-right: 0;
