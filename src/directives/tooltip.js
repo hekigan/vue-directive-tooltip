@@ -21,19 +21,20 @@ const DEFAULT_OPTIONS = {
     title: '',
     class: '', // ex: 'tooltip-custom tooltip-other-custom'
     triggers: ['hover', 'focus'],
-    offset: 100
+    offset: 5
 };
 
 export default class Tootlip {
     constructor (el, options = {}) {
+        Tootlip._defaults = DEFAULT_OPTIONS;
         this._options = {
-            ...DEFAULT_OPTIONS,
+            ...Tootlip._defaults,
             ...{
-                onCreate: () => {
+                onCreate: (data) => {
                     this.content(this.tooltip.options.title);
                     this._$tt.update();
                 },
-                onUpdate: () => {
+                onUpdate: (data) => {
                     this.content(this.tooltip.options.title);
                     this._$tt.update();
                 }
@@ -182,15 +183,35 @@ export default class Tootlip {
     static filterOptions (options) {
         let opt = {...options};
 
+        opt.modifiers = {};
         opt.placement = PLACEMENT.includes(options.placement) ? options.placement : 'auto';
-        // if (!opt.modifiers) {
-        //     opt.modifiers = { offset: null };
-        // }
-        // if (opt.offset) {
-        //     opt.modifiers.offset = { offset: opt.offset };
-        // }
+
+        opt.modifiers.offset = {
+            fn: Tootlip._setOffset
+        };
 
         return opt;
+    }
+
+    static _setOffset (data, opts) {
+        let offset = data.instance.options.offset;
+
+        if (window.isNaN(offset) || offset < 0) {
+            offset = Tootlip._defaults.offset;
+        }
+
+        switch (data.placement) {
+        case 'top': data.offsets.popper.top -= offset; break;
+        case 'right': data.offsets.popper.left += offset; break;
+        case 'bottom': data.offsets.popper.top += offset; break;
+        case 'left': data.offsets.popper.left -= offset; break;
+        }
+
+        return data;
+    }
+
+    static defaults (data) {
+        Tootlip._defaults = {...Tootlip._defaults, ...data};
     }
 
     show () {
@@ -210,6 +231,8 @@ export default class Tootlip {
         this._$tt.update();
     }
 }
+
+Tootlip._defaults = DEFAULT_OPTIONS;
 
 function randomId () {
     return `${Date.now()}-${Math.round(Math.random() * 100000000)}`;

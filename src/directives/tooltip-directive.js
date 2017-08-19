@@ -25,10 +25,13 @@ import Tooltip from './tooltip.js';
 export default {
     name: 'tooltip',
     config: {},
-    install (Vue) {
+    install (Vue, installOptions) {
         Vue.directive('tooltip', {
             bind (el, binding, vnode) {},
             inserted (el, binding, vnode, oldVnode) {
+                if (installOptions) {
+                    Tooltip.defaults(installOptions);
+                }
                 let options = filterBindings(binding);
                 el.tooltip = new Tooltip(el, options);
             },
@@ -43,12 +46,16 @@ export default {
 };
 
 function filterBindings (binding) {
+    const delay = isNaN(binding.value.delay) ? 0 : binding.value.delay;
+
     return {
         class: getClass(binding),
         html: binding.value.html,
         placement: getPlacement(binding),
         title: getContent(binding),
-        triggers: getTriggers(binding)
+        triggers: getTriggers(binding),
+        offset: binding.value.offset,
+        delay
     };
 }
 
