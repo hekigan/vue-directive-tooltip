@@ -76,6 +76,7 @@ export default class Tootlip {
         // make arrow
         let $arrow = document.createElement('div');
         $arrow.setAttribute('class', 'tooltip-arrow');
+        $arrow.setAttribute('x-arrow', '');
         $popper.appendChild($arrow);
 
         // make content container
@@ -114,17 +115,19 @@ export default class Tootlip {
                 case 'hover':
                     lis('mouseenter', this._onActivate.bind(this), false);
                     lis('mouseleave', this._onDeactivate.bind(this), true);
+
+                    this._$tt.popper.addEventListener('mouseenter', this._onActivate.bind(this), true);
+                    this._$tt.popper.addEventListener('mouseleave', this._onDeactivate.bind(this), true);
                     break;
                 case 'focus':
                     lis('focus', this._onActivate.bind(this), false);
                     lis('blur', this._onDeactivate.bind(this), true);
+
+                    this._$tt.popper.addEventListener('mouseenter', this._onActivate.bind(this), true);
+                    this._$tt.popper.addEventListener('mouseleave', this._onDeactivate.bind(this), true);
                     break;
                 }
             });
-
-            // on tooltip hover, act as the reference
-            this._$tt.popper.addEventListener('mouseenter', this._onActivate.bind(this), true);
-            this._$tt.popper.addEventListener('mouseleave', this._onDeactivate.bind(this), true);
         }
     }
 
@@ -143,16 +146,19 @@ export default class Tootlip {
                 case 'hover':
                     eal('mouseenter', this._onActivate.bind(this), false);
                     eal('mouseleave', this._onDeactivate.bind(this), true);
+
+                    this._$tt.popper.removeEventListener('mouseenter', this._onActivate.bind(this), true);
+                    this._$tt.popper.removeEventListener('mouseleave', this._onDeactivate.bind(this), true);
                     break;
                 case 'focus':
                     eal('focus', this._onActivate.bind(this), false);
                     eal('blur', this._onDeactivate.bind(this), true);
+
+                    this._$tt.popper.removeEventListener('mouseenter', this._onActivate.bind(this), true);
+                    this._$tt.popper.removeEventListener('mouseleave', this._onDeactivate.bind(this), true);
                     break;
                 }
             });
-
-            this._$tt.popper.removeEventListener('mouseenter', this._onActivate.bind(this), true);
-            this._$tt.popper.removeEventListener('mouseleave', this._onDeactivate.bind(this), true);
         }
     }
 
@@ -176,13 +182,15 @@ export default class Tootlip {
             this.tooltip.options.title = content;
             wrapper.textContent = content;
         } else if (isElement(content)) {
-            var clonedNode = content.cloneNode(true);
-            wrapper.innerHTML = '';
-            this.tooltip.options.title = clonedNode;
-            wrapper.appendChild(clonedNode);
-            if (isElement(content.parentNode)) {
-                content.parentNode.removeChild(content);
+            if (content !== wrapper.children[0]) {
+                wrapper.innerHTML = '';
+                wrapper.appendChild(content);
             }
+            // var clonedNode = content.cloneNode(true);
+            // this.tooltip.options.title = clonedNode;
+            // if (isElement(content.parentNode)) {
+            //     content.parentNode.removeChild(content);
+            // }
         } else {
             console.error('unsupported content type', content);
         }
