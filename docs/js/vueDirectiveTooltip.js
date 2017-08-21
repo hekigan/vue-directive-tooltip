@@ -3501,7 +3501,7 @@ var PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 
 var DEFAULT_OPTIONS = {
     container: false,
-    delay: 0,
+    delay: 200,
     instance: null, // the popper.js instance
     eventsEnabled: true,
     html: false,
@@ -3546,6 +3546,7 @@ var Tootlip = function () {
         this._$tt = new Popper(el, $tpl, this._options);
         this._$tpl = $tpl;
         this._visible = false;
+        this._clearDelay = null;
         this._setEvents();
     }
 
@@ -3621,6 +3622,10 @@ var Tootlip = function () {
                         break;
                 }
             });
+
+            // on tooltip hover, act as the reference
+            this._$tt.popper.addEventListener('mouseenter', this._onActivate.bind(this), true);
+            this._$tt.popper.addEventListener('mouseleave', this._onDeactivate.bind(this), true);
         }
     };
 
@@ -3652,6 +3657,9 @@ var Tootlip = function () {
                         break;
                 }
             });
+
+            this._$tt.popper.removeEventListener('mouseenter', this._onActivate.bind(this), true);
+            this._$tt.popper.removeEventListener('mouseleave', this._onDeactivate.bind(this), true);
         }
     };
 
@@ -3734,12 +3742,25 @@ var Tootlip = function () {
     };
 
     Tootlip.prototype.toggle = function toggle(val) {
+        var _this4 = this;
+
+        var delay = this._options.delay;
+
         if (typeof val !== 'boolean') {
             val = !this._visible;
         }
-        this._visible = val;
-        this._$tt.popper.style.display = this._visible === true ? 'inline-block' : 'none';
-        this._$tt.update();
+
+        if (val === true) {
+            delay = 0;
+        }
+
+        clearTimeout(this._clearDelay);
+
+        this._clearDelay = setTimeout(function () {
+            _this4._visible = val;
+            _this4._$tt.popper.style.display = _this4._visible === true ? 'inline-block' : 'none';
+            _this4._$tt.update();
+        }, delay);
     };
 
     _createClass(Tootlip, [{

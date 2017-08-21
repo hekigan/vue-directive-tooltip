@@ -14,15 +14,22 @@ Super simple
 <span v-tooltip="'my text'">some text</span>
 ```
 
-It is recommended to also add the CSS file which is in the `./css/` folder.
-A SASS file is also included in the source for those who prefer fiddling.
+A **lot of options** make this tooltip convenient:
+
+- **content**: simple text or use another html tag
+- **positioning** (right, left, ...)
+- **delay** to hide (in ms)
+- **offset** (from the target in px)
+- choose from **several triggers** (hover, focus, click)
+- **full programmatic**, you choose when to show/hide the tooltip
+- and of course, use your **custom CSS** class
+
 
 ### Documentation
 
 [Full documentation with examples](https://hekigan.github.io/vue-directive-tooltip/)
 
-![Alt text](https://hekigan.github.io/vue-directive-tooltip/images/github-screenshot.jpg "Vue directive tooltip - screenshot")
-
+[<img src="https://hekigan.github.io/vue-directive-tooltip/images/github-screenshot.jpg">](https://hekigan.github.io/vue-directive-tooltip/)
 
 ### Builds
 

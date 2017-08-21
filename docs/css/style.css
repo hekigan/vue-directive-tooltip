@@ -945,6 +945,11 @@
 		top: 0;
 		width: 23em;
 		right: 0;
+		width: 20em;
+		max-height: 100vh;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 		#header h1, #header h2, #header h3, #header h4, #header h5, #header h6 {
@@ -1025,7 +1030,7 @@
 					border: 0;
 					color: #ffffff !important;
 					display: block;
-					padding: 0.85em 0;
+					padding: 7px 0;
 					text-decoration: none;
 				}
 
@@ -1046,6 +1051,10 @@
 		display: inline;
 		margin-left: 10px;
 	}
+
+#nav {
+	overflow: auto;
+}
 
 /* Wrapper */
 
@@ -1068,6 +1077,12 @@
 		#main > section:first-child {
 			border-top: 0;
 		}
+
+
+/* App  */
+#app > section {
+	margin-top: 50px;
+}
 
 /* installation */
 

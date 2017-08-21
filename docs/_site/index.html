@@ -47,8 +47,11 @@
         <nav id="nav">
             <ul>
                 <li><a href="#installation">Installation</a></li>
+                <li><a href="#defaults">Change default values</a></li>
                 <li><a href="#usage">Basic usage</a></li>
                 <li><a href="#positioning">Positioning</a></li>
+                <li><a href="#delay">Delay</a></li>
+                <li><a href="#offset">Offset</a></li>
                 <li><a href="#events-triggers">Events / Triggers</a></li>
                 <li><a href="#programmatic">Programmatic</a></li>
                 <li><a href="#custom-css">Custom css / class</a></li>
@@ -112,9 +115,44 @@ Vue.use(Tooltip);
                 raw css: <a href="https://raw.githubusercontent.com/hekigan/vue-directive-tooltip/master/css/index.css" target="_blank">download</a>
             </p>
             <prism>
-&lt;link rel="stylesheet" href="path/to/css/vueDirectiveTooltip.css">
-&lt;script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
-&lt;script src="path/to/vueDirectiveTooltip.js"></script>
+&lt;link rel="stylesheet" href="https://unpkg.com/vue-directive-tooltip@latest/css/index.min.css"&gt;
+&lt;script src="https://unpkg.com/vue@latest/dist/vue.js">&lt;/script&gt;
+&lt;script src="https://unpkg.com/vue-directive-tooltip@latest/dist/vueDirectiveTooltip.min.js">&lt;/script&gt;
+&lt;script>Vue.use(vueDirectiveTooltip);&lt;/script&gt;
+            </prism>
+        </div>
+    </section>
+
+<!-- change defaults -->
+    <section id="defaults">
+        <div class="container">
+            <header>
+                <h3>Change global default values</h3>
+            </header>
+
+            <p>
+                Default values
+            </p>
+            <prism lang="javascript">
+{
+    delay: 200,
+    placement: 'auto',
+    class: '', // ex: 'tooltip-custom tooltip-other-custom'
+    triggers: ['hover', 'focus'],
+    offset: 5
+}
+            </prism>
+            <p>
+                If you have a need to change certain default value(s) for all tooltips:
+            </p>
+            <prism lang="javascript">
+Vue.use(vueDirectiveTooltip, {
+    delay: 500,
+    placement: 'right',
+    class: 'tooltip-red',
+    triggers: ['hover'],
+    offset: 0
+});
             </prism>
         </div>
     </section>
@@ -192,6 +230,40 @@ Vue.use(Tooltip);
                 Right positioning: <a href="#" @click.prevent v-tooltip.right="'right'">right tooltip</a>
             </p>
             <prism>&lt;span v-tooltip.right="'right'">right tooltip&lt;/span></prism>
+        </div>
+    </section>
+
+<!-- delay -->
+    <section id="delay">
+        <div class="container">
+            <header>
+                <h3>Delay</h3>
+            </header>
+
+            <p>
+                default: { delay: 200 }
+            </p>
+            <p>
+                Example: <a href="#" @click.prevent v-tooltip.right="{content:'delayed by 1 second', delay: 1000}">Delayed Tooltip</a>
+            </p>
+            <prism>&lt;span v-tooltip="{content:'delayed by 1 second', delay: 1000}">Delayed Tooltip&lt;/span></prism>
+        </div>
+    </section>
+
+<!-- offset -->
+    <section id="offset">
+        <div class="container">
+            <header>
+                <h3>Offset</h3>
+            </header>
+
+            <p>
+                default: { offset: 5 }
+            </p>
+            <p>
+                Example: <a href="#" @click.prevent v-tooltip.right="{content:'offset by 30px', offset: 30}">Offset Tooltip</a>
+            </p>
+            <prism>&lt;span v-tooltip="{content:'offset by 30px', offset: 30}">Offset Tooltip&lt;/span></prism>
         </div>
     </section>
 
@@ -312,6 +384,8 @@ export default {
 </div>
 
     <script>
+        Vue.use(vueDirectiveTooltip);
+
         Vue.component('Prism', {
             props: ['lang'],
             template: `<pre><code :class="language"><slot/></code></pre>`,
