@@ -3551,7 +3551,7 @@ var Tootlip = function () {
     }
 
     Tootlip.prototype.destroy = function destroy() {
-        this._setEvents('remove');
+        this._cleanEvents();
         document.querySelector('body').removeChild(this._$tpl);
     };
 
@@ -3579,26 +3579,16 @@ var Tootlip = function () {
     Tootlip.prototype._setEvents = function _setEvents() {
         var _this2 = this;
 
-        var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'add';
-
         if (!Array.isArray(this.options.triggers)) {
             console.error('trigger should be an array', this.options.triggers);
             return;
         }
-        var lis = null;
-        if (state === 'add') {
-            lis = function lis() {
-                var _$el;
 
-                return (_$el = _this2._$el).addEventListener.apply(_$el, arguments);
-            };
-        } else {
-            lis = function lis() {
-                var _$el2;
+        var lis = function lis() {
+            var _$el;
 
-                return (_$el2 = _this2._$el).removeEventListener.apply(_$el2, arguments);
-            };
-        }
+            return (_$el = _this2._$el).addEventListener.apply(_$el, arguments);
+        };
 
         if (this.options.triggers.includes('manual')) {
             lis('click', this._onToggle.bind(this), false);
@@ -3607,25 +3597,21 @@ var Tootlip = function () {
                 switch (evt) {
                     case 'click':
                         lis('click', _this2._onToggle.bind(_this2), false);
-                        if (state === 'add') {
-                            document.addEventListener('click', _this2._onDeactivate.bind(_this2), false);
-                        } else {
-                            document.removeEventListener('click', _this2._onDeactivate.bind(_this2), false);
-                        }
+                        document.addEventListener('click', _this2._onDeactivate.bind(_this2), false);
                         break;
                     case 'hover':
                         lis('mouseenter', _this2._onActivate.bind(_this2), false);
                         lis('mouseleave', _this2._onDeactivate.bind(_this2), true);
 
-                        _this2._$tt.popper.addEventListener('mouseenter', _this2._onActivate.bind(_this2), true);
-                        _this2._$tt.popper.addEventListener('mouseleave', _this2._onDeactivate.bind(_this2), true);
+                        _this2._$tt.popper.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), true);
+                        _this2._$tt.popper.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), true);
                         break;
                     case 'focus':
                         lis('focus', _this2._onActivate.bind(_this2), false);
                         lis('blur', _this2._onDeactivate.bind(_this2), true);
 
-                        _this2._$tt.popper.addEventListener('mouseenter', _this2._onActivate.bind(_this2), true);
-                        _this2._$tt.popper.addEventListener('mouseleave', _this2._onDeactivate.bind(_this2), true);
+                        _this2._$tt.popper.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), true);
+                        _this2._$tt.popper.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), true);
                         break;
                 }
             });
@@ -3636,9 +3622,9 @@ var Tootlip = function () {
         var _this3 = this;
 
         var eal = function eal() {
-            var _$el3;
+            var _$el2;
 
-            return (_$el3 = _this3._$el).removeEventListener.apply(_$el3, arguments);
+            return (_$el2 = _this3._$el).removeEventListener.apply(_$el2, arguments);
         };
 
         if (this.options.triggers.includes('manual')) {
@@ -3648,21 +3634,21 @@ var Tootlip = function () {
                 switch (evt) {
                     case 'click':
                         eal('click', _this3._onToggle.bind(_this3), false);
-                        document.addEventListener('click', _this3._onDeactivate.bind(_this3), false);
+                        document.removeEventListener('click', _this3._onDeactivate.bind(_this3), false);
                         break;
                     case 'hover':
                         eal('mouseenter', _this3._onActivate.bind(_this3), false);
                         eal('mouseleave', _this3._onDeactivate.bind(_this3), true);
 
-                        _this3._$tt.popper.removeEventListener('mouseenter', _this3._onActivate.bind(_this3), true);
-                        _this3._$tt.popper.removeEventListener('mouseleave', _this3._onDeactivate.bind(_this3), true);
+                        _this3._$tt.popper.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), true);
+                        _this3._$tt.popper.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), true);
                         break;
                     case 'focus':
                         eal('focus', _this3._onActivate.bind(_this3), false);
                         eal('blur', _this3._onDeactivate.bind(_this3), true);
 
-                        _this3._$tt.popper.removeEventListener('mouseenter', _this3._onActivate.bind(_this3), true);
-                        _this3._$tt.popper.removeEventListener('mouseleave', _this3._onDeactivate.bind(_this3), true);
+                        _this3._$tt.popper.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), true);
+                        _this3._$tt.popper.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), true);
                         break;
                 }
             });
@@ -3681,6 +3667,14 @@ var Tootlip = function () {
         e.stopPropagation();
         e.preventDefault();
         this.toggle();
+    };
+
+    Tootlip.prototype._onMouseOverTooltip = function _onMouseOverTooltip(e) {
+        this.toggle(true, false);
+    };
+
+    Tootlip.prototype._onMouseOutTooltip = function _onMouseOutTooltip(e) {
+        this.toggle(false);
     };
 
     Tootlip.prototype.content = function content(_content) {
@@ -3749,26 +3743,30 @@ var Tootlip = function () {
         this.toggle(false);
     };
 
-    Tootlip.prototype.toggle = function toggle(val) {
+    Tootlip.prototype.toggle = function toggle(visible) {
         var _this4 = this;
+
+        var autoHide = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
         var delay = this._options.delay;
 
-        if (typeof val !== 'boolean') {
-            val = !this._visible;
+        if (typeof visible !== 'boolean') {
+            visible = !this._visible;
         }
 
-        if (val === true) {
+        if (visible === true) {
             delay = 0;
         }
 
         clearTimeout(this._clearDelay);
 
-        this._clearDelay = setTimeout(function () {
-            _this4._visible = val;
-            _this4._$tt.popper.style.display = _this4._visible === true ? 'inline-block' : 'none';
-            _this4._$tt.update();
-        }, delay);
+        if (autoHide === true) {
+            this._clearDelay = setTimeout(function () {
+                _this4._visible = visible;
+                _this4._$tt.popper.style.display = _this4._visible === true ? 'inline-block' : 'none';
+                _this4._$tt.update();
+            }, delay);
+        }
     };
 
     _createClass(Tootlip, [{

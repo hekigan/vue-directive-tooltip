@@ -54,7 +54,7 @@ export default class Tootlip {
     }
 
     destroy () {
-        this._setEvents('remove');
+        this._cleanEvents();
         document.querySelector('body').removeChild(this._$tpl);
     }
 
@@ -87,17 +87,13 @@ export default class Tootlip {
         return $popper;
     }
 
-    _setEvents (state = 'add') {
+    _setEvents () {
         if (!Array.isArray(this.options.triggers)) {
             console.error('trigger should be an array', this.options.triggers);
             return;
         }
-        let lis = null;
-        if (state === 'add') {
-            lis = (...params) => this._$el.addEventListener(...params);
-        } else {
-            lis = (...params) => this._$el.removeEventListener(...params);
-        }
+
+        let lis = (...params) => this._$el.addEventListener(...params);
 
         if (this.options.triggers.includes('manual')) {
             lis('click', this._onToggle.bind(this), false);
@@ -106,25 +102,21 @@ export default class Tootlip {
                 switch (evt) {
                 case 'click':
                     lis('click', this._onToggle.bind(this), false);
-                    if (state === 'add') {
-                        document.addEventListener('click', this._onDeactivate.bind(this), false);
-                    } else {
-                        document.removeEventListener('click', this._onDeactivate.bind(this), false);
-                    }
+                    document.addEventListener('click', this._onDeactivate.bind(this), false);
                     break;
                 case 'hover':
                     lis('mouseenter', this._onActivate.bind(this), false);
                     lis('mouseleave', this._onDeactivate.bind(this), true);
 
-                    this._$tt.popper.addEventListener('mouseenter', this._onActivate.bind(this), true);
-                    this._$tt.popper.addEventListener('mouseleave', this._onDeactivate.bind(this), true);
+                    this._$tt.popper.addEventListener('mouseenter', this._onMouseOverTooltip.bind(this), true);
+                    this._$tt.popper.addEventListener('mouseleave', this._onMouseOutTooltip.bind(this), true);
                     break;
                 case 'focus':
                     lis('focus', this._onActivate.bind(this), false);
                     lis('blur', this._onDeactivate.bind(this), true);
 
-                    this._$tt.popper.addEventListener('mouseenter', this._onActivate.bind(this), true);
-                    this._$tt.popper.addEventListener('mouseleave', this._onDeactivate.bind(this), true);
+                    this._$tt.popper.addEventListener('mouseenter', this._onMouseOverTooltip.bind(this), true);
+                    this._$tt.popper.addEventListener('mouseleave', this._onMouseOutTooltip.bind(this), true);
                     break;
                 }
             });
@@ -141,21 +133,21 @@ export default class Tootlip {
                 switch (evt) {
                 case 'click':
                     eal('click', this._onToggle.bind(this), false);
-                    document.addEventListener('click', this._onDeactivate.bind(this), false);
+                    document.removeEventListener('click', this._onDeactivate.bind(this), false);
                     break;
                 case 'hover':
                     eal('mouseenter', this._onActivate.bind(this), false);
                     eal('mouseleave', this._onDeactivate.bind(this), true);
 
-                    this._$tt.popper.removeEventListener('mouseenter', this._onActivate.bind(this), true);
-                    this._$tt.popper.removeEventListener('mouseleave', this._onDeactivate.bind(this), true);
+                    this._$tt.popper.removeEventListener('mouseenter', this._onMouseOverTooltip.bind(this), true);
+                    this._$tt.popper.removeEventListener('mouseleave', this._onMouseOutTooltip.bind(this), true);
                     break;
                 case 'focus':
                     eal('focus', this._onActivate.bind(this), false);
                     eal('blur', this._onDeactivate.bind(this), true);
 
-                    this._$tt.popper.removeEventListener('mouseenter', this._onActivate.bind(this), true);
-                    this._$tt.popper.removeEventListener('mouseleave', this._onDeactivate.bind(this), true);
+                    this._$tt.popper.removeEventListener('mouseenter', this._onMouseOverTooltip.bind(this), true);
+                    this._$tt.popper.removeEventListener('mouseleave', this._onMouseOutTooltip.bind(this), true);
                     break;
                 }
             });
@@ -174,6 +166,14 @@ export default class Tootlip {
         e.stopPropagation();
         e.preventDefault();
         this.toggle();
+    }
+
+    _onMouseOverTooltip (e) {
+        this.toggle(true, false);
+    }
+
+    _onMouseOutTooltip (e) {
+        this.toggle(false);
     }
 
     content (content) {
@@ -238,24 +238,26 @@ export default class Tootlip {
         this.toggle(false);
     }
 
-    toggle (val) {
+    toggle (visible, autoHide = true) {
         let delay = this._options.delay;
 
-        if (typeof val !== 'boolean') {
-            val = !this._visible;
+        if (typeof visible !== 'boolean') {
+            visible = !this._visible;
         }
 
-        if (val === true) {
+        if (visible === true) {
             delay = 0;
         }
 
         clearTimeout(this._clearDelay);
 
-        this._clearDelay = setTimeout(() => {
-            this._visible = val;
-            this._$tt.popper.style.display = (this._visible === true) ? 'inline-block' : 'none';
-            this._$tt.update();
-        }, delay);
+        if (autoHide === true) {
+            this._clearDelay = setTimeout(() => {
+                this._visible = visible;
+                this._$tt.popper.style.display = (this._visible === true) ? 'inline-block' : 'none';
+                this._$tt.update();
+            }, delay);
+        }
     }
 }
 
