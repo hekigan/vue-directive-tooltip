@@ -3603,15 +3603,15 @@ var Tootlip = function () {
                         lis('mouseenter', _this2._onActivate.bind(_this2), false);
                         lis('mouseleave', _this2._onDeactivate.bind(_this2), true);
 
-                        _this2._$tt.popper.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), true);
-                        _this2._$tt.popper.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), true);
+                        _this2._$tpl.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), false);
+                        _this2._$tpl.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), false);
                         break;
                     case 'focus':
                         lis('focus', _this2._onActivate.bind(_this2), false);
                         lis('blur', _this2._onDeactivate.bind(_this2), true);
 
-                        _this2._$tt.popper.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), true);
-                        _this2._$tt.popper.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), true);
+                        _this2._$tpl.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), false);
+                        _this2._$tpl.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), false);
                         break;
                 }
             });
@@ -3640,15 +3640,15 @@ var Tootlip = function () {
                         eal('mouseenter', _this3._onActivate.bind(_this3), false);
                         eal('mouseleave', _this3._onDeactivate.bind(_this3), true);
 
-                        _this3._$tt.popper.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), true);
-                        _this3._$tt.popper.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), true);
+                        _this3._$tpl.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), false);
+                        _this3._$tpl.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), false);
                         break;
                     case 'focus':
                         eal('focus', _this3._onActivate.bind(_this3), false);
                         eal('blur', _this3._onDeactivate.bind(_this3), true);
 
-                        _this3._$tt.popper.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), true);
-                        _this3._$tt.popper.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), true);
+                        _this3._$tpl.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), false);
+                        _this3._$tpl.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), false);
                         break;
                 }
             });
