@@ -3499,6 +3499,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var BASE_CLASS = 'h-tooltip';
 var PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 
+var EVENTS = {
+    ADD: 1,
+    REMOVE: 2
+};
+
 var DEFAULT_OPTIONS = {
     container: false,
     delay: 200,
@@ -3576,9 +3581,12 @@ var Tootlip = function () {
         return $popper;
     };
 
-    Tootlip.prototype._setEvents = function _setEvents() {
+    Tootlip.prototype._events = function _events() {
         var _this2 = this;
 
+        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : EVENTS.ADD;
+
+        var evtType = type === EVENTS.ADD ? 'addEventListener' : 'removeEventListener';
         if (!Array.isArray(this.options.triggers)) {
             console.error('trigger should be an array', this.options.triggers);
             return;
@@ -3587,7 +3595,7 @@ var Tootlip = function () {
         var lis = function lis() {
             var _$el;
 
-            return (_$el = _this2._$el).addEventListener.apply(_$el, arguments);
+            return (_$el = _this2._$el)[evtType].apply(_$el, arguments);
         };
 
         if (this.options.triggers.includes('manual')) {
@@ -3597,62 +3605,32 @@ var Tootlip = function () {
                 switch (evt) {
                     case 'click':
                         lis('click', _this2._onToggle.bind(_this2), false);
-                        document.addEventListener('click', _this2._onDeactivate.bind(_this2), false);
+                        document[evtType]('click', _this2._onDeactivate.bind(_this2), false);
                         break;
                     case 'hover':
                         lis('mouseenter', _this2._onActivate.bind(_this2), false);
                         lis('mouseleave', _this2._onDeactivate.bind(_this2), true);
-
-                        _this2._$tpl.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), false);
-                        _this2._$tpl.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), false);
                         break;
                     case 'focus':
                         lis('focus', _this2._onActivate.bind(_this2), false);
                         lis('blur', _this2._onDeactivate.bind(_this2), true);
-
-                        _this2._$tpl.addEventListener('mouseenter', _this2._onMouseOverTooltip.bind(_this2), false);
-                        _this2._$tpl.addEventListener('mouseleave', _this2._onMouseOutTooltip.bind(_this2), false);
                         break;
                 }
             });
+
+            if (this.options.triggers.includes('hover') || this.options.triggers.includes('focus')) {
+                this._$tpl[evtType]('mouseenter', this._onMouseOverTooltip.bind(this), false);
+                this._$tpl[evtType]('mouseleave', this._onMouseOutTooltip.bind(this), false);
+            }
         }
     };
 
+    Tootlip.prototype._setEvents = function _setEvents() {
+        this._events();
+    };
+
     Tootlip.prototype._cleanEvents = function _cleanEvents() {
-        var _this3 = this;
-
-        var eal = function eal() {
-            var _$el2;
-
-            return (_$el2 = _this3._$el).removeEventListener.apply(_$el2, arguments);
-        };
-
-        if (this.options.triggers.includes('manual')) {
-            eal('click', this._onToggle.bind(this), false);
-        } else {
-            this.options.triggers.map(function (evt) {
-                switch (evt) {
-                    case 'click':
-                        eal('click', _this3._onToggle.bind(_this3), false);
-                        document.removeEventListener('click', _this3._onDeactivate.bind(_this3), false);
-                        break;
-                    case 'hover':
-                        eal('mouseenter', _this3._onActivate.bind(_this3), false);
-                        eal('mouseleave', _this3._onDeactivate.bind(_this3), true);
-
-                        _this3._$tpl.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), false);
-                        _this3._$tpl.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), false);
-                        break;
-                    case 'focus':
-                        eal('focus', _this3._onActivate.bind(_this3), false);
-                        eal('blur', _this3._onDeactivate.bind(_this3), true);
-
-                        _this3._$tpl.removeEventListener('mouseenter', _this3._onMouseOverTooltip.bind(_this3), false);
-                        _this3._$tpl.removeEventListener('mouseleave', _this3._onMouseOutTooltip.bind(_this3), false);
-                        break;
-                }
-            });
-        }
+        this._events(EVENTS.REMOVE);
     };
 
     Tootlip.prototype._onActivate = function _onActivate(e) {
@@ -3744,7 +3722,7 @@ var Tootlip = function () {
     };
 
     Tootlip.prototype.toggle = function toggle(visible) {
-        var _this4 = this;
+        var _this3 = this;
 
         var autoHide = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
@@ -3762,9 +3740,9 @@ var Tootlip = function () {
 
         if (autoHide === true) {
             this._clearDelay = setTimeout(function () {
-                _this4._visible = visible;
-                _this4._$tt.popper.style.display = _this4._visible === true ? 'inline-block' : 'none';
-                _this4._$tt.update();
+                _this3._visible = visible;
+                _this3._$tt.popper.style.display = _this3._visible === true ? 'inline-block' : 'none';
+                _this3._$tt.update();
             }, delay);
         }
     };

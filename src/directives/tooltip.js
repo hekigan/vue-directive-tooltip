@@ -4,6 +4,11 @@ import Popper from 'popper.js';
 const BASE_CLASS = 'h-tooltip';
 const PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 
+const EVENTS = {
+    ADD: 1,
+    REMOVE: 2
+};
+
 const DEFAULT_OPTIONS = {
     container: false,
     delay: 200,
@@ -87,13 +92,14 @@ export default class Tootlip {
         return $popper;
     }
 
-    _setEvents () {
+    _events (type = EVENTS.ADD) {
+        const evtType = (type === EVENTS.ADD) ? 'addEventListener' : 'removeEventListener';
         if (!Array.isArray(this.options.triggers)) {
             console.error('trigger should be an array', this.options.triggers);
             return;
         }
 
-        let lis = (...params) => this._$el.addEventListener(...params);
+        let lis = (...params) => this._$el[evtType](...params);
 
         if (this.options.triggers.includes('manual')) {
             lis('click', this._onToggle.bind(this), false);
@@ -102,56 +108,32 @@ export default class Tootlip {
                 switch (evt) {
                 case 'click':
                     lis('click', this._onToggle.bind(this), false);
-                    document.addEventListener('click', this._onDeactivate.bind(this), false);
+                    document[evtType]('click', this._onDeactivate.bind(this), false);
                     break;
                 case 'hover':
                     lis('mouseenter', this._onActivate.bind(this), false);
                     lis('mouseleave', this._onDeactivate.bind(this), true);
-
-                    this._$tpl.addEventListener('mouseenter', this._onMouseOverTooltip.bind(this), false);
-                    this._$tpl.addEventListener('mouseleave', this._onMouseOutTooltip.bind(this), false);
                     break;
                 case 'focus':
                     lis('focus', this._onActivate.bind(this), false);
                     lis('blur', this._onDeactivate.bind(this), true);
-
-                    this._$tpl.addEventListener('mouseenter', this._onMouseOverTooltip.bind(this), false);
-                    this._$tpl.addEventListener('mouseleave', this._onMouseOutTooltip.bind(this), false);
                     break;
                 }
             });
+
+            if (this.options.triggers.includes('hover') || this.options.triggers.includes('focus')) {
+                this._$tpl[evtType]('mouseenter', this._onMouseOverTooltip.bind(this), false);
+                this._$tpl[evtType]('mouseleave', this._onMouseOutTooltip.bind(this), false);
+            }
         }
     }
 
+    _setEvents () {
+        this._events();
+    }
+
     _cleanEvents () {
-        const eal = (...params) => this._$el.removeEventListener(...params);
-
-        if (this.options.triggers.includes('manual')) {
-            eal('click', this._onToggle.bind(this), false);
-        } else {
-            this.options.triggers.map(evt => {
-                switch (evt) {
-                case 'click':
-                    eal('click', this._onToggle.bind(this), false);
-                    document.removeEventListener('click', this._onDeactivate.bind(this), false);
-                    break;
-                case 'hover':
-                    eal('mouseenter', this._onActivate.bind(this), false);
-                    eal('mouseleave', this._onDeactivate.bind(this), true);
-
-                    this._$tpl.removeEventListener('mouseenter', this._onMouseOverTooltip.bind(this), false);
-                    this._$tpl.removeEventListener('mouseleave', this._onMouseOutTooltip.bind(this), false);
-                    break;
-                case 'focus':
-                    eal('focus', this._onActivate.bind(this), false);
-                    eal('blur', this._onDeactivate.bind(this), true);
-
-                    this._$tpl.removeEventListener('mouseenter', this._onMouseOverTooltip.bind(this), false);
-                    this._$tpl.removeEventListener('mouseleave', this._onMouseOutTooltip.bind(this), false);
-                    break;
-                }
-            });
-        }
+        this._events(EVENTS.REMOVE);
     }
 
     _onActivate (e) {
