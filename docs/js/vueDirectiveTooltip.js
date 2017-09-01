@@ -3524,16 +3524,16 @@ var DEFAULT_OPTIONS = {
     offset: 5
 };
 
-var Tootlip = function () {
-    function Tootlip(el) {
+var Tooltip$2 = function () {
+    function Tooltip(el) {
         var _this = this;
 
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-        _classCallCheck(this, Tootlip);
+        _classCallCheck(this, Tooltip);
 
-        Tootlip._defaults = DEFAULT_OPTIONS;
-        this._options = _extends({}, Tootlip._defaults, {
+        // Tooltip._defaults = DEFAULT_OPTIONS;
+        this._options = _extends({}, Tooltip._defaults, {
             onCreate: function onCreate(data) {
                 _this.content(_this.tooltip.options.title);
                 _this._$tt.update();
@@ -3542,7 +3542,9 @@ var Tootlip = function () {
                 _this.content(_this.tooltip.options.title);
                 _this._$tt.update();
             }
-        }, Tootlip.filterOptions(options));
+        }, Tooltip.filterOptions(options));
+
+        console.log(_extends({}, Tooltip._defaults), _extends({}, options), _extends({}, this.options));
 
         var $tpl = this._createTooltipElement(this.options);
         document.querySelector('body').appendChild($tpl);
@@ -3555,12 +3557,12 @@ var Tootlip = function () {
         this._setEvents();
     }
 
-    Tootlip.prototype.destroy = function destroy() {
+    Tooltip.prototype.destroy = function destroy() {
         this._cleanEvents();
         document.querySelector('body').removeChild(this._$tpl);
     };
 
-    Tootlip.prototype._createTooltipElement = function _createTooltipElement(options) {
+    Tooltip.prototype._createTooltipElement = function _createTooltipElement(options) {
         // wrapper
         var $popper = document.createElement('div');
         $popper.setAttribute('id', 'tooltip-' + randomId());
@@ -3581,7 +3583,7 @@ var Tootlip = function () {
         return $popper;
     };
 
-    Tootlip.prototype._events = function _events() {
+    Tooltip.prototype._events = function _events() {
         var _this2 = this;
 
         var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : EVENTS.ADD;
@@ -3625,37 +3627,37 @@ var Tootlip = function () {
         }
     };
 
-    Tootlip.prototype._setEvents = function _setEvents() {
+    Tooltip.prototype._setEvents = function _setEvents() {
         this._events();
     };
 
-    Tootlip.prototype._cleanEvents = function _cleanEvents() {
+    Tooltip.prototype._cleanEvents = function _cleanEvents() {
         this._events(EVENTS.REMOVE);
     };
 
-    Tootlip.prototype._onActivate = function _onActivate(e) {
+    Tooltip.prototype._onActivate = function _onActivate(e) {
         this.show();
     };
 
-    Tootlip.prototype._onDeactivate = function _onDeactivate(e) {
+    Tooltip.prototype._onDeactivate = function _onDeactivate(e) {
         this.hide();
     };
 
-    Tootlip.prototype._onToggle = function _onToggle(e) {
+    Tooltip.prototype._onToggle = function _onToggle(e) {
         e.stopPropagation();
         e.preventDefault();
         this.toggle();
     };
 
-    Tootlip.prototype._onMouseOverTooltip = function _onMouseOverTooltip(e) {
+    Tooltip.prototype._onMouseOverTooltip = function _onMouseOverTooltip(e) {
         this.toggle(true, false);
     };
 
-    Tootlip.prototype._onMouseOutTooltip = function _onMouseOutTooltip(e) {
+    Tooltip.prototype._onMouseOutTooltip = function _onMouseOutTooltip(e) {
         this.toggle(false);
     };
 
-    Tootlip.prototype.content = function content(_content) {
+    Tooltip.prototype.content = function content(_content) {
         var wrapper = this.tooltip.popper.querySelector('.tooltip-content');
         if (typeof _content === 'string') {
             this.tooltip.options.title = _content;
@@ -3675,24 +3677,24 @@ var Tootlip = function () {
         }
     };
 
-    Tootlip.filterOptions = function filterOptions(options) {
+    Tooltip.filterOptions = function filterOptions(options) {
         var opt = _extends({}, options);
 
         opt.modifiers = {};
-        opt.placement = PLACEMENT.includes(options.placement) ? options.placement : 'auto';
+        opt.placement = PLACEMENT.includes(options.placement) ? options.placement : Tooltip._defaults.placement;
 
         opt.modifiers.offset = {
-            fn: Tootlip._setOffset
+            fn: Tooltip._setOffset
         };
 
         return opt;
     };
 
-    Tootlip._setOffset = function _setOffset(data, opts) {
+    Tooltip._setOffset = function _setOffset(data, opts) {
         var offset = data.instance.options.offset;
 
         if (window.isNaN(offset) || offset < 0) {
-            offset = Tootlip._defaults.offset;
+            offset = Tooltip._defaults.offset;
         }
 
         switch (data.placement) {
@@ -3709,19 +3711,19 @@ var Tootlip = function () {
         return data;
     };
 
-    Tootlip.defaults = function defaults(data) {
-        Tootlip._defaults = _extends({}, Tootlip._defaults, data);
+    Tooltip.defaults = function defaults(data) {
+        Tooltip._defaults = _extends({}, Tooltip._defaults, data);
     };
 
-    Tootlip.prototype.show = function show() {
+    Tooltip.prototype.show = function show() {
         this.toggle(true);
     };
 
-    Tootlip.prototype.hide = function hide() {
+    Tooltip.prototype.hide = function hide() {
         this.toggle(false);
     };
 
-    Tootlip.prototype.toggle = function toggle(visible) {
+    Tooltip.prototype.toggle = function toggle(visible) {
         var _this3 = this;
 
         var autoHide = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
@@ -3747,7 +3749,7 @@ var Tootlip = function () {
         }
     };
 
-    _createClass(Tootlip, [{
+    _createClass(Tooltip, [{
         key: 'options',
         get: function get() {
             return _extends({}, this._options);
@@ -3759,10 +3761,10 @@ var Tootlip = function () {
         }
     }]);
 
-    return Tootlip;
+    return Tooltip;
 }();
 
-Tootlip._defaults = DEFAULT_OPTIONS;
+Tooltip$2._defaults = _extends({}, DEFAULT_OPTIONS);
 
 function randomId() {
     return Date.now() + '-' + Math.round(Math.random() * 100000000);
@@ -3806,13 +3808,18 @@ var Tooltip$1 = {
     config: {},
     install: function install(Vue, installOptions) {
         Vue.directive('tooltip', {
-            bind: function bind(el, binding, vnode) {},
+            bind: function bind(el, binding, vnode) {
+                console.warn(installOptions);
+                if (installOptions) {
+                    Tooltip$2.defaults(installOptions);
+                }
+            },
             inserted: function inserted(el, binding, vnode, oldVnode) {
                 if (installOptions) {
-                    Tootlip.defaults(installOptions);
+                    Tooltip$2.defaults(installOptions);
                 }
                 var options = filterBindings(binding);
-                el.tooltip = new Tootlip(el, options);
+                el.tooltip = new Tooltip$2(el, options);
             },
             componentUpdated: function componentUpdated(el, binding, vnode, oldVnode) {
                 update(el, binding);
@@ -3825,7 +3832,7 @@ var Tooltip$1 = {
 };
 
 function filterBindings(binding) {
-    var delay = isNaN(binding.value.delay) ? 0 : binding.value.delay;
+    var delay = isNaN(binding.value.delay) ? Tooltip$2._defaults.delay : binding.value.delay;
 
     return {
         class: getClass(binding),
@@ -3833,7 +3840,7 @@ function filterBindings(binding) {
         placement: getPlacement(binding),
         title: getContent(binding),
         triggers: getTriggers(binding),
-        offset: binding.value.offset,
+        offset: binding.value.offset || Tooltip$2._defaults.offset,
         delay: delay
     };
 }
@@ -3856,6 +3863,8 @@ function getPlacement(_ref) {
         placement = 'top';
     } else if (modifiers.bottom) {
         placement = 'bottom';
+    } else if (Tooltip$2._defaults.placement) {
+        placement = Tooltip$2._defaults.placement;
     }
 
     return placement;
@@ -3923,6 +3932,8 @@ function getClass(_ref3) {
 
     if (isObject(value) && typeof value.class === 'string') {
         return 'vue-tooltip ' + value.class;
+    } else if (Tooltip$2._defaults.class) {
+        return 'vue-tooltip ' + Tooltip$2._defaults.class;
     } else {
         return 'vue-tooltip';
     }

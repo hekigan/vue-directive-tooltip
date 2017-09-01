@@ -27,7 +27,11 @@ export default {
     config: {},
     install (Vue, installOptions) {
         Vue.directive('tooltip', {
-            bind (el, binding, vnode) {},
+            bind (el, binding, vnode) {
+                if (installOptions) {
+                    Tooltip.defaults(installOptions);
+                }
+            },
             inserted (el, binding, vnode, oldVnode) {
                 if (installOptions) {
                     Tooltip.defaults(installOptions);
@@ -46,7 +50,7 @@ export default {
 };
 
 function filterBindings (binding) {
-    const delay = isNaN(binding.value.delay) ? 0 : binding.value.delay;
+    const delay = isNaN(binding.value.delay) ? Tooltip._defaults.delay : binding.value.delay;
 
     return {
         class: getClass(binding),
@@ -54,7 +58,7 @@ function filterBindings (binding) {
         placement: getPlacement(binding),
         title: getContent(binding),
         triggers: getTriggers(binding),
-        offset: binding.value.offset,
+        offset: binding.value.offset || Tooltip._defaults.offset,
         delay
     };
 }
@@ -75,6 +79,8 @@ function getPlacement ({modifiers}) {
         placement = 'top';
     } else if (modifiers.bottom) {
         placement = 'bottom';
+    } else if (Tooltip._defaults.placement) {
+        placement = Tooltip._defaults.placement;
     }
 
     return placement;
@@ -138,6 +144,8 @@ function isElement (value) {
 function getClass ({value}) {
     if (isObject(value) && typeof value.class === 'string') {
         return `vue-tooltip ${value.class}`;
+    } else if (Tooltip._defaults.class) {
+        return `vue-tooltip ${Tooltip._defaults.class}`;
     } else {
         return 'vue-tooltip';
     }

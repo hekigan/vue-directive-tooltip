@@ -29,11 +29,11 @@ const DEFAULT_OPTIONS = {
     offset: 5
 };
 
-export default class Tootlip {
+export default class Tooltip {
     constructor (el, options = {}) {
-        Tootlip._defaults = DEFAULT_OPTIONS;
+        // Tooltip._defaults = DEFAULT_OPTIONS;
         this._options = {
-            ...Tootlip._defaults,
+            ...Tooltip._defaults,
             ...{
                 onCreate: (data) => {
                     this.content(this.tooltip.options.title);
@@ -44,7 +44,7 @@ export default class Tootlip {
                     this._$tt.update();
                 }
             },
-            ...Tootlip.filterOptions(options)
+            ...Tooltip.filterOptions(options)
         };
 
         const $tpl = this._createTooltipElement(this.options);
@@ -182,10 +182,10 @@ export default class Tootlip {
         let opt = {...options};
 
         opt.modifiers = {};
-        opt.placement = PLACEMENT.includes(options.placement) ? options.placement : 'auto';
+        opt.placement = PLACEMENT.includes(options.placement) ? options.placement : Tooltip._defaults.placement;
 
         opt.modifiers.offset = {
-            fn: Tootlip._setOffset
+            fn: Tooltip._setOffset
         };
 
         return opt;
@@ -195,7 +195,7 @@ export default class Tootlip {
         let offset = data.instance.options.offset;
 
         if (window.isNaN(offset) || offset < 0) {
-            offset = Tootlip._defaults.offset;
+            offset = Tooltip._defaults.offset;
         }
 
         switch (data.placement) {
@@ -209,7 +209,7 @@ export default class Tootlip {
     }
 
     static defaults (data) {
-        Tootlip._defaults = {...Tootlip._defaults, ...data};
+        Tooltip._defaults = {...Tooltip._defaults, ...data};
     }
 
     show () {
@@ -243,7 +243,7 @@ export default class Tootlip {
     }
 }
 
-Tootlip._defaults = DEFAULT_OPTIONS;
+Tooltip._defaults = {...DEFAULT_OPTIONS};
 
 function randomId () {
     return `${Date.now()}-${Math.round(Math.random() * 100000000)}`;
