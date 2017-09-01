@@ -3544,8 +3544,6 @@ var Tooltip$2 = function () {
             }
         }, Tooltip.filterOptions(options));
 
-        console.log(_extends({}, Tooltip._defaults), _extends({}, options), _extends({}, this.options));
-
         var $tpl = this._createTooltipElement(this.options);
         document.querySelector('body').appendChild($tpl);
 
@@ -3809,7 +3807,6 @@ var Tooltip$1 = {
     install: function install(Vue, installOptions) {
         Vue.directive('tooltip', {
             bind: function bind(el, binding, vnode) {
-                console.warn(installOptions);
                 if (installOptions) {
                     Tooltip$2.defaults(installOptions);
                 }
