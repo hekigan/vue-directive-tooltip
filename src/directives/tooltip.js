@@ -53,6 +53,7 @@ export default class Tooltip {
         this._$el = el;
         this._$tt = new Popper(el, $tpl, this._options);
         this._$tpl = $tpl;
+        this._disabled = false;
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
@@ -212,6 +213,12 @@ export default class Tooltip {
         Tooltip._defaults = {...Tooltip._defaults, ...data};
     }
 
+    set disabled (val) {
+        if (typeof val === 'boolean') {
+            this._disabled = val;
+        }
+    }
+
     show () {
         this.toggle(true);
     }
@@ -222,6 +229,12 @@ export default class Tooltip {
 
     toggle (visible, autoHide = true) {
         let delay = this._options.delay;
+
+        if (this._disabled === true) {
+            visible = false;
+            delay = 0;
+            return;
+        }
 
         if (typeof visible !== 'boolean') {
             visible = !this._visible;

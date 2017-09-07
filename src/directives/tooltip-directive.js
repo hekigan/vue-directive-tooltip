@@ -38,6 +38,10 @@ export default {
                 }
                 let options = filterBindings(binding);
                 el.tooltip = new Tooltip(el, options);
+
+                if (binding.modifiers.notrigger && binding.value.visible === true) {
+                    el.tooltip.show();
+                }
             },
             componentUpdated (el, binding, vnode, oldVnode) {
                 update(el, binding);
@@ -183,6 +187,12 @@ function update (el, binding) {
     } else {
         // el.tooltip._class = binding.value.class || '';
         el.tooltip.content(getContent(binding));
+
+        if (!binding.modifiers.notrigger && typeof binding.value.visible === 'boolean') {
+            el.tooltip.disabled = !binding.value.visible;
+            return;
+        }
+
         if (binding.value.visible === true) {
             el.tooltip.show();
         } else {

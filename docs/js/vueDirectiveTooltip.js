@@ -3550,6 +3550,7 @@ var Tooltip$2 = function () {
         this._$el = el;
         this._$tt = new Popper(el, $tpl, this._options);
         this._$tpl = $tpl;
+        this._disabled = false;
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
@@ -3728,6 +3729,12 @@ var Tooltip$2 = function () {
 
         var delay = this._options.delay;
 
+        if (this._disabled === true) {
+            visible = false;
+            delay = 0;
+            return;
+        }
+
         if (typeof visible !== 'boolean') {
             visible = !this._visible;
         }
@@ -3756,6 +3763,13 @@ var Tooltip$2 = function () {
         key: 'tooltip',
         get: function get() {
             return this._$tt;
+        }
+    }, {
+        key: 'disabled',
+        set: function set(val) {
+            if (typeof val === 'boolean') {
+                this._disabled = val;
+            }
         }
     }]);
 
@@ -3817,6 +3831,10 @@ var Tooltip$1 = {
                 }
                 var options = filterBindings(binding);
                 el.tooltip = new Tooltip$2(el, options);
+
+                if (binding.modifiers.notrigger && binding.value.visible === true) {
+                    el.tooltip.show();
+                }
             },
             componentUpdated: function componentUpdated(el, binding, vnode, oldVnode) {
                 update(el, binding);
@@ -3970,6 +3988,12 @@ function update(el, binding) {
     } else {
         // el.tooltip._class = binding.value.class || '';
         el.tooltip.content(getContent(binding));
+
+        if (!binding.modifiers.notrigger && typeof binding.value.visible === 'boolean') {
+            el.tooltip.disabled = !binding.value.visible;
+            return;
+        }
+
         if (binding.value.visible === true) {
             el.tooltip.show();
         } else {
