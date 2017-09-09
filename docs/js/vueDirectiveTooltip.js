@@ -6,7 +6,7 @@
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.3
+ * @version 1.12.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -1056,7 +1056,7 @@ var index = {
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.3
+ * @version 1.12.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -3835,6 +3835,10 @@ var Tooltip$1 = {
                 if (binding.modifiers.notrigger && binding.value.visible === true) {
                     el.tooltip.show();
                 }
+
+                if (binding.value.visible === false) {
+                    el.tooltip.disabled = true;
+                }
             },
             componentUpdated: function componentUpdated(el, binding, vnode, oldVnode) {
                 update(el, binding);
@@ -3992,9 +3996,11 @@ function update(el, binding) {
         if (!binding.modifiers.notrigger && typeof binding.value.visible === 'boolean') {
             el.tooltip.disabled = !binding.value.visible;
             return;
+        } else if (binding.modifiers.notrigger) {
+            el.tooltip.disabled = false;
         }
 
-        if (binding.value.visible === true) {
+        if (!el.tooltip.disabled && binding.value.visible === true) {
             el.tooltip.show();
         } else {
             el.tooltip.hide();
