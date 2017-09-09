@@ -179,6 +179,14 @@ export default class Tooltip {
         }
     }
 
+    set class (val) {
+        if (typeof val === 'string') {
+            const classList = this._$tpl.classList.value.replace(this.options.class, val);
+            this._options.class = classList;
+            this._$tpl.setAttribute('class', classList);
+        }
+    }
+
     static filterOptions (options) {
         let opt = {...options};
 

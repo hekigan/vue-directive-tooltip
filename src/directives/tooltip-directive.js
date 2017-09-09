@@ -4,6 +4,8 @@
  */
 import Tooltip from './tooltip.js';
 
+const BASE_CLASS = 'vue-tooltip';
+
 /**
  * usage:
  *
@@ -151,11 +153,11 @@ function isElement (value) {
  */
 function getClass ({value}) {
     if (isObject(value) && typeof value.class === 'string') {
-        return `vue-tooltip ${value.class}`;
+        return `${BASE_CLASS} ${value.class}`;
     } else if (Tooltip._defaults.class) {
-        return `vue-tooltip ${Tooltip._defaults.class}`;
+        return `${BASE_CLASS} ${Tooltip._defaults.class}`;
     } else {
-        return 'vue-tooltip';
+        return BASE_CLASS;
     }
 }
 
@@ -189,7 +191,10 @@ function update (el, binding) {
     if (typeof binding.value === 'string') {
         el.tooltip._content = binding.value;
     } else {
-        // el.tooltip._class = binding.value.class || '';
+        if (binding.value.class && binding.value.class.trim() !== el.tooltip.options.class.replace(BASE_CLASS, '').trim()) {
+            el.tooltip.class = `${BASE_CLASS} ${binding.value.class.trim()}`;
+        }
+
         el.tooltip.content(getContent(binding));
 
         if (!binding.modifiers.notrigger && typeof binding.value.visible === 'boolean') {

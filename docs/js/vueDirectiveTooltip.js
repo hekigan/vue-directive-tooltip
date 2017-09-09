@@ -3496,7 +3496,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var BASE_CLASS = 'h-tooltip';
+var BASE_CLASS$1 = 'h-tooltip';
 var PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 
 var EVENTS = {
@@ -3565,7 +3565,7 @@ var Tooltip$2 = function () {
         // wrapper
         var $popper = document.createElement('div');
         $popper.setAttribute('id', 'tooltip-' + randomId());
-        $popper.setAttribute('class', BASE_CLASS + ' ' + this._options.class);
+        $popper.setAttribute('class', BASE_CLASS$1 + ' ' + this._options.class);
         index.setStyles($popper, { display: 'none' });
 
         // make arrow
@@ -3765,6 +3765,15 @@ var Tooltip$2 = function () {
             return this._$tt;
         }
     }, {
+        key: 'class',
+        set: function set(val) {
+            if (typeof val === 'string') {
+                var classList = this._$tpl.classList.value.replace(this.options.class, val);
+                this._options.class = classList;
+                this._$tpl.setAttribute('class', classList);
+            }
+        }
+    }, {
         key: 'disabled',
         set: function set(val) {
             if (typeof val === 'boolean') {
@@ -3797,6 +3806,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @author: laurent blanes <laurent.blanes@gmail.com>
  * @tutorial: https://hekigan.github.io/vue-directive-tooltip/
  */
+var BASE_CLASS = 'vue-tooltip';
+
 /**
  * usage:
  *
@@ -3950,11 +3961,11 @@ function getClass(_ref3) {
     var value = _ref3.value;
 
     if (isObject(value) && typeof value.class === 'string') {
-        return 'vue-tooltip ' + value.class;
+        return BASE_CLASS + ' ' + value.class;
     } else if (Tooltip$2._defaults.class) {
-        return 'vue-tooltip ' + Tooltip$2._defaults.class;
+        return BASE_CLASS + ' ' + Tooltip$2._defaults.class;
     } else {
-        return 'vue-tooltip';
+        return BASE_CLASS;
     }
 }
 
@@ -3990,7 +4001,10 @@ function update(el, binding) {
     if (typeof binding.value === 'string') {
         el.tooltip._content = binding.value;
     } else {
-        // el.tooltip._class = binding.value.class || '';
+        if (binding.value.class && binding.value.class.trim() !== el.tooltip.options.class.replace(BASE_CLASS, '').trim()) {
+            el.tooltip.class = BASE_CLASS + ' ' + binding.value.class.trim();
+        }
+
         el.tooltip.content(getContent(binding));
 
         if (!binding.modifiers.notrigger && typeof binding.value.visible === 'boolean') {
