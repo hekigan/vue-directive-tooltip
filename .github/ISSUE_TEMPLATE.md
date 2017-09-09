@@ -1,21 +1,29 @@
-**Do you want to request a feature or report a bug?**
+### Feature
+
+In case of feature request, please add **"[feature]"** in the title
+eg: `[feature] would like to add this great idea`
 
 <!-- Ask usage questions on StackOverflow, questions will be closed. -->
 
-**Feature:**
+### Bug
 
-**If this is a feature request, what is motivation or use case for changing the behavior?**:
+When submitting a bug, please use the template below to reproduce the bug on Codepen.
+Bug with no example on Codepen will be most likely get closed.
 
-**Bug:**
+#### Behaviour
 
-**What is the current behavior?**:
+**Current**:
 
-**What is the expected behavior?**:
+**Expected**:
 
-**Please provide the steps to reproduce or a link (repository) to a [Short, Self Contained, Correct (Compilable), Example (SSCE)](http://sscce.org/)**:
+**Please, provide the steps and use the template from the link below to reproduce the bug**:
+
+This template already has `Vue.js` and `vue-directive-tooltip` setup.
+Just adjust the code to reproduce your issue.
+
+https://codepen.io/hekigan/pen/BdjJxo
 
 **Please mention other relevant information**:
 
-**Browser Version:
-<br/>Node.js Version:
-<br/>Operating System:**
+- Browser Version:
+- Operating System:
