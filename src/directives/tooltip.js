@@ -29,6 +29,10 @@ const DEFAULT_OPTIONS = {
     offset: 5
 };
 
+const includes = (stack, needle) => {
+    return stack.indexOf(needle) > -1;
+};
+
 export default class Tooltip {
     constructor (el, options = {}) {
         // Tooltip._defaults = DEFAULT_OPTIONS;
@@ -102,7 +106,7 @@ export default class Tooltip {
 
         let lis = (...params) => this._$el[evtType](...params);
 
-        if (this.options.triggers.includes('manual')) {
+        if (includes(this.options.triggers, 'manual')) {
             lis('click', this._onToggle.bind(this), false);
         } else {
             this.options.triggers.map(evt => {
@@ -122,7 +126,7 @@ export default class Tooltip {
                 }
             });
 
-            if (this.options.triggers.includes('hover') || this.options.triggers.includes('focus')) {
+            if (includes(this.options.triggers, 'hover') || includes(this.options.triggers, 'focus')) {
                 this._$tpl[evtType]('mouseenter', this._onMouseOverTooltip.bind(this), false);
                 this._$tpl[evtType]('mouseleave', this._onMouseOutTooltip.bind(this), false);
             }
@@ -191,7 +195,7 @@ export default class Tooltip {
         let opt = {...options};
 
         opt.modifiers = {};
-        opt.placement = PLACEMENT.includes(options.placement) ? options.placement : Tooltip._defaults.placement;
+        opt.placement = includes(PLACEMENT, options.placement) ? options.placement : Tooltip._defaults.placement;
 
         opt.modifiers.offset = {
             fn: Tooltip._setOffset

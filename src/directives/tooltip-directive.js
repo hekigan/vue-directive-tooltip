@@ -5,6 +5,8 @@
 import Tooltip from './tooltip.js';
 
 const BASE_CLASS = 'vue-tooltip';
+const POSITIONS = ['auto', 'top', 'bottom', 'left', 'right'];
+const SUB_POSITIONS = ['start', 'end'];
 
 /**
  * usage:
@@ -15,7 +17,11 @@ const BASE_CLASS = 'vue-tooltip';
  * <div v-tooltip="{content: 'my content'}">
  *
  * // change position of tooltip
- * // options: bottom (default) | top | left | right
+ * // options: auto (default) | bottom | top | left | right
+ *
+ * // change sub-position of tooltip
+ * // options: start | end
+ *
  * <div v-tooltip.top="{content: 'my content'}">
  *
  * // add custom class
@@ -78,22 +84,19 @@ function filterBindings (binding) {
  * @param {*} binding
  */
 function getPlacement ({modifiers}) {
-    let placement = 'auto';
-
-    // Placement
-    if (modifiers.left) {
-        placement = 'left';
-    } else if (modifiers.right) {
-        placement = 'right';
-    } else if (modifiers.top) {
-        placement = 'top';
-    } else if (modifiers.bottom) {
-        placement = 'bottom';
-    } else if (Tooltip._defaults.placement) {
-        placement = Tooltip._defaults.placement;
+    const MODS = Object.keys(modifiers);
+    let head = 'auto';
+    let tail = null;
+    for (let i = 0; i < MODS.length; i++) {
+        const pos = MODS[i];
+        if (POSITIONS.indexOf(pos) > -1) {
+            head = pos;
+        }
+        if (SUB_POSITIONS.indexOf(pos) > -1) {
+            tail = pos;
+        }
     }
-
-    return placement;
+    return (head && tail) ? `${head}-${tail}` : head;
 }
 
 /**

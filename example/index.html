@@ -62,8 +62,6 @@
             }
         </style>
         <link rel="stylesheet" href="../css/index.css">
-        <script src="https://unpkg.com/vue@2.2.6/dist/vue.js"></script>
-        <script src="../dist/vueDirectiveTooltip.js"></script>
     </head>
     <body>
         <div id="app">
@@ -237,12 +235,19 @@ import App from './App.vue';
             </ol>
         </div>
 
+        <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+        <script src="../dist/vueDirectiveTooltip.js"></script>
+
         <script>
-            new Vue({ el: '#app', data() {
-                return {
-                    visibility: true
-                };
-            } });
+            Vue.use(vueDirectiveTooltip);
+            new Vue({
+                el: '#app',
+                data: function() {
+                    return {
+                        visibility: true
+                    };
+                }
+            });
         </script>
     </body>
 </html>
