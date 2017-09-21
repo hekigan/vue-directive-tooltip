@@ -6,7 +6,7 @@
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.3
+ * @version 1.12.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -1056,7 +1056,7 @@ var index = {
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.12.3
+ * @version 1.12.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -3496,8 +3496,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var BASE_CLASS = 'h-tooltip';
+var BASE_CLASS$1 = 'h-tooltip';
 var PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
+var SUB_PLACEMENT = ['start', 'end'];
+
+var EVENTS = {
+    ADD: 1,
+    REMOVE: 2
+};
 
 var DEFAULT_OPTIONS = {
     container: false,
@@ -3519,16 +3525,20 @@ var DEFAULT_OPTIONS = {
     offset: 5
 };
 
-var Tootlip = function () {
-    function Tootlip(el) {
+var includes = function includes(stack, needle) {
+    return stack.indexOf(needle) > -1;
+};
+
+var Tooltip$2 = function () {
+    function Tooltip(el) {
         var _this = this;
 
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-        _classCallCheck(this, Tootlip);
+        _classCallCheck(this, Tooltip);
 
-        Tootlip._defaults = DEFAULT_OPTIONS;
-        this._options = _extends({}, Tootlip._defaults, {
+        // Tooltip._defaults = DEFAULT_OPTIONS;
+        this._options = _extends({}, Tooltip._defaults, {
             onCreate: function onCreate(data) {
                 _this.content(_this.tooltip.options.title);
                 _this._$tt.update();
@@ -3537,7 +3547,7 @@ var Tootlip = function () {
                 _this.content(_this.tooltip.options.title);
                 _this._$tt.update();
             }
-        }, Tootlip.filterOptions(options));
+        }, Tooltip.filterOptions(options));
 
         var $tpl = this._createTooltipElement(this.options);
         document.querySelector('body').appendChild($tpl);
@@ -3545,26 +3555,28 @@ var Tootlip = function () {
         this._$el = el;
         this._$tt = new Popper(el, $tpl, this._options);
         this._$tpl = $tpl;
+        this._disabled = false;
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
     }
 
-    Tootlip.prototype.destroy = function destroy() {
-        this._setEvents('remove');
+    Tooltip.prototype.destroy = function destroy() {
+        this._cleanEvents();
         document.querySelector('body').removeChild(this._$tpl);
     };
 
-    Tootlip.prototype._createTooltipElement = function _createTooltipElement(options) {
+    Tooltip.prototype._createTooltipElement = function _createTooltipElement(options) {
         // wrapper
         var $popper = document.createElement('div');
         $popper.setAttribute('id', 'tooltip-' + randomId());
-        $popper.setAttribute('class', BASE_CLASS + ' ' + this._options.class);
+        $popper.setAttribute('class', BASE_CLASS$1 + ' ' + this._options.class);
         index.setStyles($popper, { display: 'none' });
 
         // make arrow
         var $arrow = document.createElement('div');
         $arrow.setAttribute('class', 'tooltip-arrow');
+        $arrow.setAttribute('x-arrow', '');
         $popper.appendChild($arrow);
 
         // make content container
@@ -3575,42 +3587,31 @@ var Tootlip = function () {
         return $popper;
     };
 
-    Tootlip.prototype._setEvents = function _setEvents() {
+    Tooltip.prototype._events = function _events() {
         var _this2 = this;
 
-        var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'add';
+        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : EVENTS.ADD;
 
+        var evtType = type === EVENTS.ADD ? 'addEventListener' : 'removeEventListener';
         if (!Array.isArray(this.options.triggers)) {
             console.error('trigger should be an array', this.options.triggers);
             return;
         }
-        var lis = null;
-        if (state === 'add') {
-            lis = function lis() {
-                var _$el;
 
-                return (_$el = _this2._$el).addEventListener.apply(_$el, arguments);
-            };
-        } else {
-            lis = function lis() {
-                var _$el2;
+        var lis = function lis() {
+            var _$el;
 
-                return (_$el2 = _this2._$el).removeEventListener.apply(_$el2, arguments);
-            };
-        }
+            return (_$el = _this2._$el)[evtType].apply(_$el, arguments);
+        };
 
-        if (this.options.triggers.includes('manual')) {
+        if (includes(this.options.triggers, 'manual')) {
             lis('click', this._onToggle.bind(this), false);
         } else {
             this.options.triggers.map(function (evt) {
                 switch (evt) {
                     case 'click':
                         lis('click', _this2._onToggle.bind(_this2), false);
-                        if (state === 'add') {
-                            document.addEventListener('click', _this2._onDeactivate.bind(_this2), false);
-                        } else {
-                            document.removeEventListener('click', _this2._onDeactivate.bind(_this2), false);
-                        }
+                        document[evtType]('click', _this2._onDeactivate.bind(_this2), false);
                         break;
                     case 'hover':
                         lis('mouseenter', _this2._onActivate.bind(_this2), false);
@@ -3623,96 +3624,91 @@ var Tootlip = function () {
                 }
             });
 
-            // on tooltip hover, act as the reference
-            this._$tt.popper.addEventListener('mouseenter', this._onActivate.bind(this), true);
-            this._$tt.popper.addEventListener('mouseleave', this._onDeactivate.bind(this), true);
+            if (includes(this.options.triggers, 'hover') || includes(this.options.triggers, 'focus')) {
+                this._$tpl[evtType]('mouseenter', this._onMouseOverTooltip.bind(this), false);
+                this._$tpl[evtType]('mouseleave', this._onMouseOutTooltip.bind(this), false);
+            }
         }
     };
 
-    Tootlip.prototype._cleanEvents = function _cleanEvents() {
-        var _this3 = this;
-
-        var eal = function eal() {
-            var _$el3;
-
-            return (_$el3 = _this3._$el).removeEventListener.apply(_$el3, arguments);
-        };
-
-        if (this.options.triggers.includes('manual')) {
-            eal('click', this._onToggle.bind(this), false);
-        } else {
-            this.options.triggers.map(function (evt) {
-                switch (evt) {
-                    case 'click':
-                        eal('click', _this3._onToggle.bind(_this3), false);
-                        document.addEventListener('click', _this3._onDeactivate.bind(_this3), false);
-                        break;
-                    case 'hover':
-                        eal('mouseenter', _this3._onActivate.bind(_this3), false);
-                        eal('mouseleave', _this3._onDeactivate.bind(_this3), true);
-                        break;
-                    case 'focus':
-                        eal('focus', _this3._onActivate.bind(_this3), false);
-                        eal('blur', _this3._onDeactivate.bind(_this3), true);
-                        break;
-                }
-            });
-
-            this._$tt.popper.removeEventListener('mouseenter', this._onActivate.bind(this), true);
-            this._$tt.popper.removeEventListener('mouseleave', this._onDeactivate.bind(this), true);
-        }
+    Tooltip.prototype._setEvents = function _setEvents() {
+        this._events();
     };
 
-    Tootlip.prototype._onActivate = function _onActivate(e) {
+    Tooltip.prototype._cleanEvents = function _cleanEvents() {
+        this._events(EVENTS.REMOVE);
+    };
+
+    Tooltip.prototype._onActivate = function _onActivate(e) {
         this.show();
     };
 
-    Tootlip.prototype._onDeactivate = function _onDeactivate(e) {
+    Tooltip.prototype._onDeactivate = function _onDeactivate(e) {
         this.hide();
     };
 
-    Tootlip.prototype._onToggle = function _onToggle(e) {
+    Tooltip.prototype._onToggle = function _onToggle(e) {
         e.stopPropagation();
         e.preventDefault();
         this.toggle();
     };
 
-    Tootlip.prototype.content = function content(_content) {
+    Tooltip.prototype._onMouseOverTooltip = function _onMouseOverTooltip(e) {
+        this.toggle(true, false);
+    };
+
+    Tooltip.prototype._onMouseOutTooltip = function _onMouseOutTooltip(e) {
+        this.toggle(false);
+    };
+
+    Tooltip.prototype.content = function content(_content) {
         var wrapper = this.tooltip.popper.querySelector('.tooltip-content');
         if (typeof _content === 'string') {
             this.tooltip.options.title = _content;
             wrapper.textContent = _content;
         } else if (isElement$1(_content)) {
-            var clonedNode = _content.cloneNode(true);
-            wrapper.innerHTML = '';
-            this.tooltip.options.title = clonedNode;
-            wrapper.appendChild(clonedNode);
-            if (isElement$1(_content.parentNode)) {
-                _content.parentNode.removeChild(_content);
+            if (_content !== wrapper.children[0]) {
+                wrapper.innerHTML = '';
+                wrapper.appendChild(_content);
             }
+            // var clonedNode = content.cloneNode(true);
+            // this.tooltip.options.title = clonedNode;
+            // if (isElement(content.parentNode)) {
+            //     content.parentNode.removeChild(content);
+            // }
         } else {
             console.error('unsupported content type', _content);
         }
     };
 
-    Tootlip.filterOptions = function filterOptions(options) {
+    Tooltip.filterOptions = function filterOptions(options) {
         var opt = _extends({}, options);
 
         opt.modifiers = {};
-        opt.placement = PLACEMENT.includes(options.placement) ? options.placement : 'auto';
+        var head = null;
+        var tail = null;
+        if (options.placement.indexOf('-') > -1) {
+            var _options$placement$sp = options.placement.split('-');
 
+            head = _options$placement$sp[0];
+            tail = _options$placement$sp[1];
+
+            opt.placement = includes(PLACEMENT, head) && includes(SUB_PLACEMENT, tail) ? options.placement : Tooltip._defaults.placement;
+        } else {
+            opt.placement = includes(PLACEMENT, options.placement) ? options.placement : Tooltip._defaults.placement;
+        }
         opt.modifiers.offset = {
-            fn: Tootlip._setOffset
+            fn: Tooltip._setOffset
         };
 
         return opt;
     };
 
-    Tootlip._setOffset = function _setOffset(data, opts) {
+    Tooltip._setOffset = function _setOffset(data, opts) {
         var offset = data.instance.options.offset;
 
         if (window.isNaN(offset) || offset < 0) {
-            offset = Tootlip._defaults.offset;
+            offset = Tooltip._defaults.offset;
         }
 
         switch (data.placement) {
@@ -3729,41 +3725,51 @@ var Tootlip = function () {
         return data;
     };
 
-    Tootlip.defaults = function defaults(data) {
-        Tootlip._defaults = _extends({}, Tootlip._defaults, data);
+    Tooltip.defaults = function defaults(data) {
+        Tooltip._defaults = _extends({}, Tooltip._defaults, data);
     };
 
-    Tootlip.prototype.show = function show() {
+    Tooltip.prototype.show = function show() {
         this.toggle(true);
     };
 
-    Tootlip.prototype.hide = function hide() {
+    Tooltip.prototype.hide = function hide() {
         this.toggle(false);
     };
 
-    Tootlip.prototype.toggle = function toggle(val) {
-        var _this4 = this;
+    Tooltip.prototype.toggle = function toggle(visible) {
+        var _this3 = this;
+
+        var autoHide = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
         var delay = this._options.delay;
 
-        if (typeof val !== 'boolean') {
-            val = !this._visible;
+        if (this._disabled === true) {
+            visible = false;
+            delay = 0;
+            return;
         }
 
-        if (val === true) {
+        if (typeof visible !== 'boolean') {
+            visible = !this._visible;
+        }
+
+        if (visible === true) {
             delay = 0;
         }
 
         clearTimeout(this._clearDelay);
 
-        this._clearDelay = setTimeout(function () {
-            _this4._visible = val;
-            _this4._$tt.popper.style.display = _this4._visible === true ? 'inline-block' : 'none';
-            _this4._$tt.update();
-        }, delay);
+        if (autoHide === true) {
+            this._clearDelay = setTimeout(function () {
+                _this3._visible = visible;
+                _this3._$tt.popper.style.display = _this3._visible === true ? 'inline-block' : 'none';
+                _this3._$tt.update();
+            }, delay);
+        }
     };
 
-    _createClass(Tootlip, [{
+    _createClass(Tooltip, [{
         key: 'options',
         get: function get() {
             return _extends({}, this._options);
@@ -3773,12 +3779,28 @@ var Tootlip = function () {
         get: function get() {
             return this._$tt;
         }
+    }, {
+        key: 'class',
+        set: function set(val) {
+            if (typeof val === 'string') {
+                var classList = this._$tpl.classList.value.replace(this.options.class, val);
+                this._options.class = classList;
+                this._$tpl.setAttribute('class', classList);
+            }
+        }
+    }, {
+        key: 'disabled',
+        set: function set(val) {
+            if (typeof val === 'boolean') {
+                this._disabled = val;
+            }
+        }
     }]);
 
-    return Tootlip;
+    return Tooltip;
 }();
 
-Tootlip._defaults = DEFAULT_OPTIONS;
+Tooltip$2._defaults = _extends({}, DEFAULT_OPTIONS);
 
 function randomId() {
     return Date.now() + '-' + Math.round(Math.random() * 100000000);
@@ -3799,6 +3821,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @author: laurent blanes <laurent.blanes@gmail.com>
  * @tutorial: https://hekigan.github.io/vue-directive-tooltip/
  */
+var BASE_CLASS = 'vue-tooltip';
+var POSITIONS = ['auto', 'top', 'bottom', 'left', 'right'];
+var SUB_POSITIONS = ['start', 'end'];
+
 /**
  * usage:
  *
@@ -3808,7 +3834,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * <div v-tooltip="{content: 'my content'}">
  *
  * // change position of tooltip
- * // options: bottom (default) | top | left | right
+ * // options: auto (default) | bottom | top | left | right
+ *
+ * // change sub-position of tooltip
+ * // options: start | end
+ *
  * <div v-tooltip.top="{content: 'my content'}">
  *
  * // add custom class
@@ -3822,13 +3852,25 @@ var Tooltip$1 = {
     config: {},
     install: function install(Vue, installOptions) {
         Vue.directive('tooltip', {
-            bind: function bind(el, binding, vnode) {},
+            bind: function bind(el, binding, vnode) {
+                if (installOptions) {
+                    Tooltip$2.defaults(installOptions);
+                }
+            },
             inserted: function inserted(el, binding, vnode, oldVnode) {
                 if (installOptions) {
-                    Tootlip.defaults(installOptions);
+                    Tooltip$2.defaults(installOptions);
                 }
                 var options = filterBindings(binding);
-                el.tooltip = new Tootlip(el, options);
+                el.tooltip = new Tooltip$2(el, options);
+
+                if (binding.modifiers.notrigger && binding.value.visible === true) {
+                    el.tooltip.show();
+                }
+
+                if (binding.value.visible === false) {
+                    el.tooltip.disabled = true;
+                }
             },
             componentUpdated: function componentUpdated(el, binding, vnode, oldVnode) {
                 update(el, binding);
@@ -3841,7 +3883,7 @@ var Tooltip$1 = {
 };
 
 function filterBindings(binding) {
-    var delay = isNaN(binding.value.delay) ? 0 : binding.value.delay;
+    var delay = isNaN(binding.value.delay) ? Tooltip$2._defaults.delay : binding.value.delay;
 
     return {
         class: getClass(binding),
@@ -3849,7 +3891,7 @@ function filterBindings(binding) {
         placement: getPlacement(binding),
         title: getContent(binding),
         triggers: getTriggers(binding),
-        offset: binding.value.offset,
+        offset: binding.value.offset || Tooltip$2._defaults.offset,
         delay: delay
     };
 }
@@ -3861,20 +3903,19 @@ function filterBindings(binding) {
 function getPlacement(_ref) {
     var modifiers = _ref.modifiers;
 
-    var placement = 'auto';
-
-    // Placement
-    if (modifiers.left) {
-        placement = 'left';
-    } else if (modifiers.right) {
-        placement = 'right';
-    } else if (modifiers.top) {
-        placement = 'top';
-    } else if (modifiers.bottom) {
-        placement = 'bottom';
+    var MODS = Object.keys(modifiers);
+    var head = 'auto';
+    var tail = null;
+    for (var i = 0; i < MODS.length; i++) {
+        var pos = MODS[i];
+        if (POSITIONS.indexOf(pos) > -1) {
+            head = pos;
+        }
+        if (SUB_POSITIONS.indexOf(pos) > -1) {
+            tail = pos;
+        }
     }
-
-    return placement;
+    return head && tail ? head + '-' + tail : head;
 }
 
 /**
@@ -3938,9 +3979,11 @@ function getClass(_ref3) {
     var value = _ref3.value;
 
     if (isObject(value) && typeof value.class === 'string') {
-        return 'vue-tooltip ' + value.class;
+        return BASE_CLASS + ' ' + value.class;
+    } else if (Tooltip$2._defaults.class) {
+        return BASE_CLASS + ' ' + Tooltip$2._defaults.class;
     } else {
-        return 'vue-tooltip';
+        return BASE_CLASS;
     }
 }
 
@@ -3976,9 +4019,20 @@ function update(el, binding) {
     if (typeof binding.value === 'string') {
         el.tooltip._content = binding.value;
     } else {
-        // el.tooltip._class = binding.value.class || '';
+        if (binding.value.class && binding.value.class.trim() !== el.tooltip.options.class.replace(BASE_CLASS, '').trim()) {
+            el.tooltip.class = BASE_CLASS + ' ' + binding.value.class.trim();
+        }
+
         el.tooltip.content(getContent(binding));
-        if (binding.value.visible === true) {
+
+        if (!binding.modifiers.notrigger && typeof binding.value.visible === 'boolean') {
+            el.tooltip.disabled = !binding.value.visible;
+            return;
+        } else if (binding.modifiers.notrigger) {
+            el.tooltip.disabled = false;
+        }
+
+        if (!el.tooltip.disabled && binding.value.visible === true) {
             el.tooltip.show();
         } else {
             el.tooltip.hide();

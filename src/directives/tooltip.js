@@ -3,6 +3,7 @@ import Popper from 'popper.js';
 
 const BASE_CLASS = 'h-tooltip';
 const PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
+const SUB_PLACEMENT = ['start', 'end'];
 
 const EVENTS = {
     ADD: 1,
@@ -195,8 +196,14 @@ export default class Tooltip {
         let opt = {...options};
 
         opt.modifiers = {};
-        opt.placement = includes(PLACEMENT, options.placement) ? options.placement : Tooltip._defaults.placement;
-
+        let head = null;
+        let tail = null;
+        if (options.placement.indexOf('-') > -1) {
+            [head, tail] = options.placement.split('-');
+            opt.placement = (includes(PLACEMENT, head) && includes(SUB_PLACEMENT, tail)) ? options.placement : Tooltip._defaults.placement;
+        } else {
+            opt.placement = (includes(PLACEMENT, options.placement)) ? options.placement : Tooltip._defaults.placement;
+        }
         opt.modifiers.offset = {
             fn: Tooltip._setOffset
         };

@@ -3498,6 +3498,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var BASE_CLASS$1 = 'h-tooltip';
 var PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
+var SUB_PLACEMENT = ['start', 'end'];
 
 var EVENTS = {
     ADD: 1,
@@ -3522,6 +3523,10 @@ var DEFAULT_OPTIONS = {
     class: '', // ex: 'tooltip-custom tooltip-other-custom'
     triggers: ['hover', 'focus'],
     offset: 5
+};
+
+var includes = function includes(stack, needle) {
+    return stack.indexOf(needle) > -1;
 };
 
 var Tooltip$2 = function () {
@@ -3599,7 +3604,7 @@ var Tooltip$2 = function () {
             return (_$el = _this2._$el)[evtType].apply(_$el, arguments);
         };
 
-        if (this.options.triggers.includes('manual')) {
+        if (includes(this.options.triggers, 'manual')) {
             lis('click', this._onToggle.bind(this), false);
         } else {
             this.options.triggers.map(function (evt) {
@@ -3619,7 +3624,7 @@ var Tooltip$2 = function () {
                 }
             });
 
-            if (this.options.triggers.includes('hover') || this.options.triggers.includes('focus')) {
+            if (includes(this.options.triggers, 'hover') || includes(this.options.triggers, 'focus')) {
                 this._$tpl[evtType]('mouseenter', this._onMouseOverTooltip.bind(this), false);
                 this._$tpl[evtType]('mouseleave', this._onMouseOutTooltip.bind(this), false);
             }
@@ -3680,8 +3685,18 @@ var Tooltip$2 = function () {
         var opt = _extends({}, options);
 
         opt.modifiers = {};
-        opt.placement = PLACEMENT.includes(options.placement) ? options.placement : Tooltip._defaults.placement;
+        var head = null;
+        var tail = null;
+        if (options.placement.indexOf('-') > -1) {
+            var _options$placement$sp = options.placement.split('-');
 
+            head = _options$placement$sp[0];
+            tail = _options$placement$sp[1];
+
+            opt.placement = includes(PLACEMENT, head) && includes(SUB_PLACEMENT, tail) ? options.placement : Tooltip._defaults.placement;
+        } else {
+            opt.placement = includes(PLACEMENT, options.placement) ? options.placement : Tooltip._defaults.placement;
+        }
         opt.modifiers.offset = {
             fn: Tooltip._setOffset
         };
@@ -3807,6 +3822,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @tutorial: https://hekigan.github.io/vue-directive-tooltip/
  */
 var BASE_CLASS = 'vue-tooltip';
+var POSITIONS = ['auto', 'top', 'bottom', 'left', 'right'];
+var SUB_POSITIONS = ['start', 'end'];
 
 /**
  * usage:
@@ -3817,7 +3834,11 @@ var BASE_CLASS = 'vue-tooltip';
  * <div v-tooltip="{content: 'my content'}">
  *
  * // change position of tooltip
- * // options: bottom (default) | top | left | right
+ * // options: auto (default) | bottom | top | left | right
+ *
+ * // change sub-position of tooltip
+ * // options: start | end
+ *
  * <div v-tooltip.top="{content: 'my content'}">
  *
  * // add custom class
@@ -3882,22 +3903,19 @@ function filterBindings(binding) {
 function getPlacement(_ref) {
     var modifiers = _ref.modifiers;
 
-    var placement = 'auto';
-
-    // Placement
-    if (modifiers.left) {
-        placement = 'left';
-    } else if (modifiers.right) {
-        placement = 'right';
-    } else if (modifiers.top) {
-        placement = 'top';
-    } else if (modifiers.bottom) {
-        placement = 'bottom';
-    } else if (Tooltip$2._defaults.placement) {
-        placement = Tooltip$2._defaults.placement;
+    var MODS = Object.keys(modifiers);
+    var head = 'auto';
+    var tail = null;
+    for (var i = 0; i < MODS.length; i++) {
+        var pos = MODS[i];
+        if (POSITIONS.indexOf(pos) > -1) {
+            head = pos;
+        }
+        if (SUB_POSITIONS.indexOf(pos) > -1) {
+            tail = pos;
+        }
     }
-
-    return placement;
+    return head && tail ? head + '-' + tail : head;
 }
 
 /**

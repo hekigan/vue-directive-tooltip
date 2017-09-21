@@ -232,6 +232,28 @@ Vue.use(vueDirectiveTooltip, {
             <prism>&lt;span v-tooltip.right="'right'">right tooltip&lt;/span></prism>
         </div>
     </section>
+    
+    <!-- positioning -->
+    <section id="positioning-variant">
+        <div class="container">
+            <header>
+                <h3>Positioning - Variants</h3>
+            </header>
+            
+            <p>
+                All above positions have 2 extra variants that you can use: start | end
+            </p>
+            <p id="position-bottom-start">
+                Bottom Start positioning: <a href="#" @click.prevent v-tooltip.bottom.start="'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laborum eius similique quaerat neque omnis non animi fugiat dicta'">tooltip</a>
+            </p>
+            <prism>&lt;span v-tooltip.bottom.start="'bottom.start'">"bottom start" tooltip&lt;/span></prism>
+
+            <p id="position-bottom-end">
+                Bottom End positioning: <a href="#" @click.prevent v-tooltip.bottom.end="'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laborum eius similique quaerat neque omnis non animi fugiat dicta'">tooltip</a>
+            </p>
+            <prism>&lt;span v-tooltip.bottom.end="'bottom.end'">"bottom end" tooltip&lt;/span></prism>
+        </div>
+    </section>
 
 <!-- delay -->
     <section id="delay">
