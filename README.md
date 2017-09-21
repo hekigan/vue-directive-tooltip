@@ -18,6 +18,7 @@ A **lot of options** make this tooltip convenient:
 
 - **content**: simple text or use another html tag
 - **positioning** (right, left, ...)
+- **positioning variants**: start | end. ex: bottom.end, top.start, right.end, etc...
 - **delay** to hide (in ms)
 - **offset** (from the target in px)
 - choose from **several triggers** (hover, focus, click)
