@@ -2,6 +2,7 @@
 
 ![Node](https://img.shields.io/node/v/vue-directive-tooltip.svg?style=flat-square)
 [![NPM](https://img.shields.io/npm/v/vue-directive-tooltip.svg?style=flat-square)](https://www.npmjs.com/package/vue-directive-tooltip)
+[![NPM Downloads/month](https://img.shields.io/npm/dm/vue-directive-tooltip.svg?style=flat-square)](https://www.npmjs.com/package/vue-directive-tooltip)
 [![Vue.js](https://img.shields.io/badge/vue-2-green.svg)](https://vuejs.org)
 
 > Vue.js tooltip directive ([based on Popper.js](https://github.com/FezVrasta/popper.js))
