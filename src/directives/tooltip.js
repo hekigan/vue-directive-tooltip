@@ -1,4 +1,3 @@
-import Utils from 'popper.js/dist/popper-utils';
 import Popper from 'popper.js';
 
 const BASE_CLASS = 'h-tooltip';
@@ -82,7 +81,7 @@ export default class Tooltip {
         let $popper = document.createElement('div');
         $popper.setAttribute('id', `tooltip-${randomId()}`);
         $popper.setAttribute('class', `${BASE_CLASS} ${this._options.class}`);
-        Utils.setStyles($popper, {display: 'none'});
+        $popper.style.display = 'none';
 
         // make arrow
         let $arrow = document.createElement('div');
