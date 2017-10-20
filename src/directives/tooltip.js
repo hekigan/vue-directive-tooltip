@@ -217,11 +217,14 @@ export default class Tooltip {
             offset = Tooltip._defaults.offset;
         }
 
-        switch (data.placement) {
-        case 'top': data.offsets.popper.top -= offset; break;
-        case 'right': data.offsets.popper.left += offset; break;
-        case 'bottom': data.offsets.popper.top += offset; break;
-        case 'left': data.offsets.popper.left -= offset; break;
+        if (data.placement.indexOf('top') !== -1) {
+            data.offsets.popper.top -= offset;
+        } else if (data.placement.indexOf('right') !== -1) {
+            data.offsets.popper.left += offset;
+        } else if (data.placement.indexOf('bottom') !== -1) {
+            data.offsets.popper.top += offset;
+        } else if (data.placement.indexOf('left') !== -1) {
+            data.offsets.popper.left -= offset;
         }
 
         return data;
