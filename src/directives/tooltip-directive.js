@@ -85,7 +85,7 @@ function filterBindings (binding) {
  */
 function getPlacement ({modifiers}) {
     const MODS = Object.keys(modifiers);
-    let head = 'auto';
+    let head = '';
     let tail = null;
     for (let i = 0; i < MODS.length; i++) {
         const pos = MODS[i];
@@ -192,7 +192,7 @@ function getContent ({value}) {
  */
 function update (el, binding) {
     if (typeof binding.value === 'string') {
-        el.tooltip._content = binding.value;
+        el.tooltip.content(binding.value);
     } else {
         if (binding.value.class && binding.value.class.trim() !== el.tooltip.options.class.replace(BASE_CLASS, '').trim()) {
             el.tooltip.class = `${BASE_CLASS} ${binding.value.class.trim()}`;

@@ -2466,7 +2466,7 @@ var DEFAULT_OPTIONS = {
             element: '.tooltip-arrow'
         }
     },
-    placement: 'auto',
+    placement: '',
     placementPostfix: null, // start | end
     removeOnDestroy: true,
     title: '',
@@ -2637,16 +2637,17 @@ var Tooltip$2 = function () {
         opt.modifiers = {};
         var head = null;
         var tail = null;
-        if (options.placement.indexOf('-') > -1) {
-            var _options$placement$sp = options.placement.split('-');
+        if (opt.placement.indexOf('-') > -1) {
+            var _opt$placement$split = opt.placement.split('-');
 
-            head = _options$placement$sp[0];
-            tail = _options$placement$sp[1];
+            head = _opt$placement$split[0];
+            tail = _opt$placement$split[1];
 
-            opt.placement = includes(PLACEMENT, head) && includes(SUB_PLACEMENT, tail) ? options.placement : Tooltip._defaults.placement;
+            opt.placement = includes(PLACEMENT, head) && includes(SUB_PLACEMENT, tail) ? opt.placement : Tooltip._defaults.placement;
         } else {
-            opt.placement = includes(PLACEMENT, options.placement) ? options.placement : Tooltip._defaults.placement;
+            opt.placement = includes(PLACEMENT, opt.placement) ? opt.placement : Tooltip._defaults.placement;
         }
+
         opt.modifiers.offset = {
             fn: Tooltip._setOffset
         };
@@ -2675,6 +2676,9 @@ var Tooltip$2 = function () {
     };
 
     Tooltip.defaults = function defaults(data) {
+        // if (data.placement) {
+        //     data.originalPlacement = data.placement;
+        // }
         Tooltip._defaults = _extends({}, Tooltip._defaults, data);
     };
 
@@ -2853,7 +2857,7 @@ function getPlacement(_ref) {
     var modifiers = _ref.modifiers;
 
     var MODS = Object.keys(modifiers);
-    var head = 'auto';
+    var head = '';
     var tail = null;
     for (var i = 0; i < MODS.length; i++) {
         var pos = MODS[i];
@@ -2966,7 +2970,7 @@ function getContent(_ref4) {
  */
 function update(el, binding) {
     if (typeof binding.value === 'string') {
-        el.tooltip._content = binding.value;
+        el.tooltip.content(binding.value);
     } else {
         if (binding.value.class && binding.value.class.trim() !== el.tooltip.options.class.replace(BASE_CLASS, '').trim()) {
             el.tooltip.class = BASE_CLASS + ' ' + binding.value.class.trim();

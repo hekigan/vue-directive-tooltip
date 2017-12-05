@@ -20,7 +20,7 @@ const DEFAULT_OPTIONS = {
             element: '.tooltip-arrow'
         }
     },
-    placement: 'auto',
+    placement: '',
     placementPostfix: null, // start | end
     removeOnDestroy: true,
     title: '',
@@ -197,12 +197,13 @@ export default class Tooltip {
         opt.modifiers = {};
         let head = null;
         let tail = null;
-        if (options.placement.indexOf('-') > -1) {
-            [head, tail] = options.placement.split('-');
-            opt.placement = (includes(PLACEMENT, head) && includes(SUB_PLACEMENT, tail)) ? options.placement : Tooltip._defaults.placement;
+        if (opt.placement.indexOf('-') > -1) {
+            [head, tail] = opt.placement.split('-');
+            opt.placement = (includes(PLACEMENT, head) && includes(SUB_PLACEMENT, tail)) ? opt.placement : Tooltip._defaults.placement;
         } else {
-            opt.placement = (includes(PLACEMENT, options.placement)) ? options.placement : Tooltip._defaults.placement;
+            opt.placement = (includes(PLACEMENT, opt.placement)) ? opt.placement : Tooltip._defaults.placement;
         }
+
         opt.modifiers.offset = {
             fn: Tooltip._setOffset
         };
@@ -231,6 +232,9 @@ export default class Tooltip {
     }
 
     static defaults (data) {
+        // if (data.placement) {
+        //     data.originalPlacement = data.placement;
+        // }
         Tooltip._defaults = {...Tooltip._defaults, ...data};
     }
 
