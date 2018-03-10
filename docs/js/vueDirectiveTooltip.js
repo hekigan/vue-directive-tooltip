@@ -2814,6 +2814,7 @@ var Tooltip$1 = {
                 if (installOptions) {
                     Tooltip$2.defaults(installOptions);
                 }
+
                 var options = filterBindings(binding);
                 el.tooltip = new Tooltip$2(el, options);
 
@@ -2821,7 +2822,7 @@ var Tooltip$1 = {
                     el.tooltip.show();
                 }
 
-                if (binding.value.visible === false) {
+                if (binding.value && binding.value.visible === false) {
                     el.tooltip.disabled = true;
                 }
             },
@@ -2836,15 +2837,15 @@ var Tooltip$1 = {
 };
 
 function filterBindings(binding) {
-    var delay = isNaN(binding.value.delay) ? Tooltip$2._defaults.delay : binding.value.delay;
+    var delay = !binding.value || isNaN(binding.value.delay) ? Tooltip$2._defaults.delay : binding.value.delay;
 
     return {
         class: getClass(binding),
-        html: binding.value.html,
+        html: binding.value ? binding.value.html : null,
         placement: getPlacement(binding),
         title: getContent(binding),
         triggers: getTriggers(binding),
-        offset: binding.value.offset || Tooltip$2._defaults.offset,
+        offset: binding.value && binding.value.offset ? binding.value.offset : Tooltip$2._defaults.offset,
         delay: delay
     };
 }
@@ -2931,7 +2932,9 @@ function isElement(value) {
 function getClass(_ref3) {
     var value = _ref3.value;
 
-    if (isObject(value) && typeof value.class === 'string') {
+    if (value === null) {
+        return BASE_CLASS;
+    } else if (isObject(value) && typeof value.class === 'string') {
         return BASE_CLASS + ' ' + value.class;
     } else if (Tooltip$2._defaults.class) {
         return BASE_CLASS + ' ' + Tooltip$2._defaults.class;
@@ -2948,7 +2951,7 @@ function getClass(_ref3) {
 function getContent(_ref4) {
     var value = _ref4.value;
 
-    if (isObject(value)) {
+    if (value !== null && isObject(value)) {
         if (value.content !== undefined) {
             return '' + value.content;
         } else if (value.html && document.getElementById(value.html)) {

@@ -44,6 +44,7 @@ export default {
                 if (installOptions) {
                     Tooltip.defaults(installOptions);
                 }
+
                 let options = filterBindings(binding);
                 el.tooltip = new Tooltip(el, options);
 
@@ -51,7 +52,7 @@ export default {
                     el.tooltip.show();
                 }
 
-                if (binding.value.visible === false) {
+                if (binding.value && binding.value.visible === false) {
                     el.tooltip.disabled = true;
                 }
             },
@@ -66,15 +67,15 @@ export default {
 };
 
 function filterBindings (binding) {
-    const delay = isNaN(binding.value.delay) ? Tooltip._defaults.delay : binding.value.delay;
+    const delay = !binding.value || isNaN(binding.value.delay) ? Tooltip._defaults.delay : binding.value.delay;
 
     return {
         class: getClass(binding),
-        html: binding.value.html,
+        html: (binding.value) ? binding.value.html : null,
         placement: getPlacement(binding),
         title: getContent(binding),
         triggers: getTriggers(binding),
-        offset: binding.value.offset || Tooltip._defaults.offset,
+        offset: (binding.value && binding.value.offset) ? binding.value.offset : Tooltip._defaults.offset,
         delay
     };
 }
@@ -155,7 +156,9 @@ function isElement (value) {
  * @return HTMLElement | String
  */
 function getClass ({value}) {
-    if (isObject(value) && typeof value.class === 'string') {
+    if (value === null) {
+        return BASE_CLASS;
+    } else if (isObject(value) && typeof value.class === 'string') {
         return `${BASE_CLASS} ${value.class}`;
     } else if (Tooltip._defaults.class) {
         return `${BASE_CLASS} ${Tooltip._defaults.class}`;
@@ -170,7 +173,7 @@ function getClass ({value}) {
  * @return HTMLElement | String
  */
 function getContent ({value}) {
-    if (isObject(value)) {
+    if (value !== null && isObject(value)) {
         if (value.content !== undefined) {
             return `${value.content}`;
         } else if (value.html && document.getElementById(value.html)) {
