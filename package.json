@@ -31,6 +31,7 @@
     "build:cjs": "rimraf cjs && cross-env BABEL_ENV=cjs babel src --out-dir cjs",
     "build:umd": "rimraf dist && cross-env BABEL_ENV=es rollup -c & cross-env BABEL_ENV=es NODE_ENV=production rollup -c",
     "copy:assets": "cp ./css/*.* ./docs/css/ && rm ./docs/js/vueDirectiveTooltip.js && cp ./dist/vueDirectiveTooltip.js ./docs/js/",
+    "start": "clear && npm run build",
     "serve:doc": "cd ./docs && jekyll serve --incremental"
   },
   "keywords": [],
@@ -64,7 +65,7 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-uglify": "^1.0.1",
     "rollup-plugin-vue": "^2.3.1",
-    "vue": "^2.2.6"
+    "vue": "^2.5.13"
   },
   "dependencies": {
     "popper.js": "^1.12.5"
