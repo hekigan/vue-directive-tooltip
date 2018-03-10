@@ -2975,20 +2975,20 @@ function update(el, binding) {
     if (typeof binding.value === 'string') {
         el.tooltip.content(binding.value);
     } else {
-        if (binding.value.class && binding.value.class.trim() !== el.tooltip.options.class.replace(BASE_CLASS, '').trim()) {
+        if (binding.value && binding.value.class && binding.value.class.trim() !== el.tooltip.options.class.replace(BASE_CLASS, '').trim()) {
             el.tooltip.class = BASE_CLASS + ' ' + binding.value.class.trim();
         }
 
         el.tooltip.content(getContent(binding));
 
-        if (!binding.modifiers.notrigger && typeof binding.value.visible === 'boolean') {
+        if (!binding.modifiers.notrigger && binding.value && typeof binding.value.visible === 'boolean') {
             el.tooltip.disabled = !binding.value.visible;
             return;
         } else if (binding.modifiers.notrigger) {
             el.tooltip.disabled = false;
         }
 
-        if (!el.tooltip.disabled && binding.value.visible === true) {
+        if (!el.tooltip.disabled && binding.value && binding.value.visible === true) {
             el.tooltip.show();
         } else {
             el.tooltip.hide();
