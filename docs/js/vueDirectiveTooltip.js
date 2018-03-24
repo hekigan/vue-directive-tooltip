@@ -2509,6 +2509,7 @@ var Tooltip$2 = function () {
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
+        // this._$tt.disableEventListeners();
     }
 
     Tooltip.prototype.destroy = function destroy() {
@@ -2565,7 +2566,7 @@ var Tooltip$2 = function () {
                         break;
                     case 'hover':
                         lis('mouseenter', _this2._onActivate.bind(_this2), false);
-                        lis('mouseleave', _this2._onDeactivate.bind(_this2), true);
+                        lis('mouseleave', _this2._onDeactivate.bind(_this2), false);
                         break;
                     case 'focus':
                         lis('focus', _this2._onActivate.bind(_this2), false);

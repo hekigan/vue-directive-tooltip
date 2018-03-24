@@ -61,6 +61,7 @@ export default class Tooltip {
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
+        // this._$tt.disableEventListeners();
     }
 
     destroy () {
@@ -117,7 +118,7 @@ export default class Tooltip {
                     break;
                 case 'hover':
                     lis('mouseenter', this._onActivate.bind(this), false);
-                    lis('mouseleave', this._onDeactivate.bind(this), true);
+                    lis('mouseleave', this._onDeactivate.bind(this), false);
                     break;
                 case 'focus':
                     lis('focus', this._onActivate.bind(this), false);
