@@ -2856,9 +2856,13 @@ function filterBindings(binding) {
  * @param {*} binding
  */
 function getPlacement(_ref) {
-    var modifiers = _ref.modifiers;
+    var modifiers = _ref.modifiers,
+        value = _ref.value;
 
     var MODS = Object.keys(modifiers);
+    if (MODS.length === 0 && isObject(value) && typeof value.placement === 'string') {
+        MODS = value.placement.split('.');
+    }
     var head = '';
     var tail = null;
     for (var i = 0; i < MODS.length; i++) {

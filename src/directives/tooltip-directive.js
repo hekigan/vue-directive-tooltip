@@ -84,8 +84,11 @@ function filterBindings (binding) {
  * Get placement from modifiers
  * @param {*} binding
  */
-function getPlacement ({modifiers}) {
-    const MODS = Object.keys(modifiers);
+function getPlacement ({modifiers, value}) {
+    let MODS = Object.keys(modifiers);
+    if (MODS.length === 0 && isObject(value) && typeof value.placement === 'string') {
+        MODS = value.placement.split('.');
+    }
     let head = '';
     let tail = null;
     for (let i = 0; i < MODS.length; i++) {
