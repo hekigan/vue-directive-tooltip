@@ -11,6 +11,10 @@ $popper-background-color: #000 !default;
     z-index: 100;
     box-shadow: 2px 2px 3px rgba(#000, 0.4);
 
+    &.vue-tooltip-hidden {
+      transform: translateX(-100000px) !important;
+    }
+
     .vue-tooltip-content {
         text-align: center;
     }

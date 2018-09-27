@@ -1,6 +1,6 @@
 import Popper from 'popper.js';
 
-const BASE_CLASS = 'h-tooltip';
+const BASE_CLASS = 'h-tooltip  vue-tooltip-hidden';
 const PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 const SUB_PLACEMENT = ['start', 'end'];
 
@@ -13,6 +13,7 @@ const DEFAULT_OPTIONS = {
     container: false,
     delay: 200,
     instance: null, // the popper.js instance
+    fixIosSafari: false,
     eventsEnabled: true,
     html: false,
     modifiers: {
@@ -82,7 +83,6 @@ export default class Tooltip {
         let $popper = document.createElement('div');
         $popper.setAttribute('id', `tooltip-${randomId()}`);
         $popper.setAttribute('class', `${BASE_CLASS} ${this._options.class}`);
-        $popper.style.display = 'none';
 
         // make arrow
         let $arrow = document.createElement('div');
@@ -110,6 +110,13 @@ export default class Tooltip {
         if (includes(this.options.triggers, 'manual')) {
             lis('click', this._onToggle.bind(this), false);
         } else {
+            // For the strange iOS/safari behaviour, we remove any 'hover' and replace it by a 'click' event
+            if (this.options.fixIosSafari && Tooltip.isIosSafari() && includes(this.options.triggers, 'hover')) {
+                const pos = this.options.triggers.indexOf('hover');
+                const click = includes(this.options.triggers, 'click');
+                this._options.triggers[pos] = (click !== -1) ? 'click' : null;
+            }
+
             this.options.triggers.map(evt => {
                 switch (evt) {
                 case 'click':
@@ -232,6 +239,11 @@ export default class Tooltip {
         return data;
     }
 
+    static isIosSafari () {
+        return includes(navigator.userAgent.toLowerCase(), 'mobile') && includes(navigator.userAgent.toLowerCase(), 'safari') &&
+                (navigator.platform.toLowerCase() === 'iphone' || navigator.platform.toLowerCase() === 'ipad');
+    }
+
     static defaults (data) {
         // if (data.placement) {
         //     data.originalPlacement = data.placement;
@@ -275,7 +287,14 @@ export default class Tooltip {
         if (autoHide === true) {
             this._clearDelay = setTimeout(() => {
                 this._visible = visible;
-                this._$tt.popper.style.display = (this._visible === true) ? 'inline-block' : 'none';
+                if (this._visible === true) {
+                    this._$tpl.classList.remove('vue-tooltip-hidden');
+                    this._$tpl.classList.add('vue-tooltip-visible');
+                } else {
+                    this._$tpl.classList.remove('vue-tooltip-visible');
+                    this._$tpl.classList.add('vue-tooltip-hidden');
+                }
+
                 this._$tt.update();
             }, delay);
         }

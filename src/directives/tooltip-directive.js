@@ -75,6 +75,7 @@ function filterBindings (binding) {
         placement: getPlacement(binding),
         title: getContent(binding),
         triggers: getTriggers(binding),
+        fixIosSafari: binding.modifiers.ios || false,
         offset: (binding.value && binding.value.offset) ? binding.value.offset : Tooltip._defaults.offset,
         delay
     };

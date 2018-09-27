@@ -2446,7 +2446,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var BASE_CLASS$1 = 'h-tooltip';
+var BASE_CLASS$1 = 'h-tooltip  vue-tooltip-hidden';
 var PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 var SUB_PLACEMENT = ['start', 'end'];
 
@@ -2459,6 +2459,7 @@ var DEFAULT_OPTIONS = {
     container: false,
     delay: 200,
     instance: null, // the popper.js instance
+    fixIosSafari: false,
     eventsEnabled: true,
     html: false,
     modifiers: {
@@ -2522,7 +2523,6 @@ var Tooltip$2 = function () {
         var $popper = document.createElement('div');
         $popper.setAttribute('id', 'tooltip-' + randomId());
         $popper.setAttribute('class', BASE_CLASS$1 + ' ' + this._options.class);
-        $popper.style.display = 'none';
 
         // make arrow
         var $arrow = document.createElement('div');
@@ -2558,6 +2558,13 @@ var Tooltip$2 = function () {
         if (includes(this.options.triggers, 'manual')) {
             lis('click', this._onToggle.bind(this), false);
         } else {
+            // For the strange iOS/safari behaviour, we remove any 'hover' and replace it by a 'click' event
+            if (this.options.fixIosSafari && Tooltip.isIosSafari() && includes(this.options.triggers, 'hover')) {
+                var pos = this.options.triggers.indexOf('hover');
+                var click = includes(this.options.triggers, 'click');
+                this._options.triggers[pos] = click !== -1 ? 'click' : null;
+            }
+
             this.options.triggers.map(function (evt) {
                 switch (evt) {
                     case 'click':
@@ -2676,6 +2683,10 @@ var Tooltip$2 = function () {
         return data;
     };
 
+    Tooltip.isIosSafari = function isIosSafari() {
+        return includes(navigator.userAgent.toLowerCase(), 'mobile') && includes(navigator.userAgent.toLowerCase(), 'safari') && (navigator.platform.toLowerCase() === 'iphone' || navigator.platform.toLowerCase() === 'ipad');
+    };
+
     Tooltip.defaults = function defaults(data) {
         // if (data.placement) {
         //     data.originalPlacement = data.placement;
@@ -2717,7 +2728,14 @@ var Tooltip$2 = function () {
         if (autoHide === true) {
             this._clearDelay = setTimeout(function () {
                 _this3._visible = visible;
-                _this3._$tt.popper.style.display = _this3._visible === true ? 'inline-block' : 'none';
+                if (_this3._visible === true) {
+                    _this3._$tpl.classList.remove('vue-tooltip-hidden');
+                    _this3._$tpl.classList.add('vue-tooltip-visible');
+                } else {
+                    _this3._$tpl.classList.remove('vue-tooltip-visible');
+                    _this3._$tpl.classList.add('vue-tooltip-hidden');
+                }
+
                 _this3._$tt.update();
             }, delay);
         }
@@ -2846,6 +2864,7 @@ function filterBindings(binding) {
         placement: getPlacement(binding),
         title: getContent(binding),
         triggers: getTriggers(binding),
+        fixIosSafari: binding.modifiers.ios || false,
         offset: binding.value && binding.value.offset ? binding.value.offset : Tooltip$2._defaults.offset,
         delay: delay
     };
