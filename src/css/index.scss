@@ -4,7 +4,6 @@ $popper-background-color: #000 !default;
     background-color: $popper-background-color;
     box-sizing: border-box;
     color: #fff;
-    // min-width: 120px;
     max-width: 320px;
     padding: 6px 10px;
     border-radius: 3px;
@@ -14,21 +13,7 @@ $popper-background-color: #000 !default;
     .vue-tooltip-content {
         text-align: center;
     }
-  
-    // .popper-close {
-    //  position: absolute;
-    //  top: 2px;
-    //  right: 4px;
-    //  color: black;
-    //  background: transparent;
-    //  border: none;
-        
-    //  &:active,
-    //  &:focus {
-    //      outline: none;
-    //  }
-    // }
-    
+
     .tooltip-arrow {
         content: '';
         width: 0;
@@ -37,10 +22,10 @@ $popper-background-color: #000 !default;
         position: absolute;
         margin: 5px;
     }
-    
+
     &[x-placement^="top"] {
         margin-bottom: 5px;
-        
+
         .tooltip-arrow {
             border-width: 5px 5px 0 5px;
             border-top-color: $popper-background-color;
@@ -52,10 +37,10 @@ $popper-background-color: #000 !default;
             margin-bottom: 0;
         }
     }
-    
+
     &[x-placement^="bottom"] {
         margin-top: 5px;
-        
+
         .tooltip-arrow {
             border-width: 0 5px 5px 5px;
             border-bottom-color: $popper-background-color;
@@ -67,10 +52,10 @@ $popper-background-color: #000 !default;
             margin-bottom: 0;
         }
     }
-    
+
     &[x-placement^="right"] {
         margin-left: 5px;
-        
+
         .tooltip-arrow {
             border-width: 5px 5px 5px 0;
             border-right-color: $popper-background-color;
@@ -82,10 +67,10 @@ $popper-background-color: #000 !default;
             margin-right: 0;
         }
     }
-    
+
     &[x-placement^="left"] {
         margin-right: 5px;
-        
+
         .tooltip-arrow {
             border-width: 5px 0 5px 5px;
             border-left-color: $popper-background-color;

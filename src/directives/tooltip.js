@@ -61,7 +61,6 @@ export default class Tooltip {
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
-        // this._$tt.disableEventListeners();
     }
 
     destroy () {
@@ -174,11 +173,6 @@ export default class Tooltip {
                 wrapper.innerHTML = '';
                 wrapper.appendChild(content);
             }
-            // var clonedNode = content.cloneNode(true);
-            // this.tooltip.options.title = clonedNode;
-            // if (isElement(content.parentNode)) {
-            //     content.parentNode.removeChild(content);
-            // }
         } else {
             console.error('unsupported content type', content);
         }
@@ -233,9 +227,6 @@ export default class Tooltip {
     }
 
     static defaults (data) {
-        // if (data.placement) {
-        //     data.originalPlacement = data.placement;
-        // }
         Tooltip._defaults = {...Tooltip._defaults, ...data};
     }
 
