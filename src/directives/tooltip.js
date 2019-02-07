@@ -179,7 +179,10 @@ export default class Tooltip {
         } else if (isElement(content)) {
             if (content !== wrapper.children[0]) {
                 wrapper.innerHTML = '';
-                wrapper.appendChild(content);
+                var cln = content.cloneNode(true);
+                cln.setAttribute('class', 'cloned-node');
+                wrapper.appendChild(cln);
+                content.setAttribute('style', 'display: none;');
             }
             // var clonedNode = content.cloneNode(true);
             // this.tooltip.options.title = clonedNode;

@@ -2627,7 +2627,10 @@ var Tooltip$2 = function () {
         } else if (isElement$1(_content)) {
             if (_content !== wrapper.children[0]) {
                 wrapper.innerHTML = '';
-                wrapper.appendChild(_content);
+                var cln = _content.cloneNode(true);
+                cln.setAttribute('class', 'cloned-node');
+                wrapper.appendChild(cln);
+                _content.setAttribute('style', 'display: none;');
             }
             // var clonedNode = content.cloneNode(true);
             // this.tooltip.options.title = clonedNode;

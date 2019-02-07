@@ -32,7 +32,11 @@ $popper-background-color: #000 !default;
     //      outline: none;
     //  }
     // }
-    
+
+    .cloned-node {
+        display: block!important;
+    }
+
     .tooltip-arrow {
         content: '';
         width: 0;
