@@ -62,7 +62,7 @@ export default class Tooltip {
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
-        // this._$tt.disableEventListeners();
+        this._$tt.disableEventListeners();
     }
 
     destroy () {
@@ -258,11 +258,13 @@ export default class Tooltip {
     }
 
     show () {
+        this._$tt.enableEventListeners();
         this.toggle(true);
     }
 
     hide () {
         this.toggle(false);
+        this._$tt.disableEventListeners();
     }
 
     toggle (visible, autoHide = true) {
@@ -288,9 +290,11 @@ export default class Tooltip {
             this._clearDelay = setTimeout(() => {
                 this._visible = visible;
                 if (this._visible === true) {
+                    this._$tt.enableEventListeners();
                     this._$tpl.classList.remove('vue-tooltip-hidden');
                     this._$tpl.classList.add('vue-tooltip-visible');
                 } else {
+                    this._$tt.disableEventListeners();
                     this._$tpl.classList.remove('vue-tooltip-visible');
                     this._$tpl.classList.add('vue-tooltip-hidden');
                 }
