@@ -225,6 +225,16 @@ import App from './App.vue';
                     </code></pre>
                 </p>
             </section>
+
+
+
+
+            <div id="perf-test">
+                <p v-for="(o, index) in perfList">
+                    <span class="tooltip-target" v-tooltip="'perf'">Performance item <span v-text="index"></span></span>
+                </p>
+            </div>
+
         </div>
 
         <div id="tooltipContent" class="tooltip-content">
@@ -244,6 +254,7 @@ import App from './App.vue';
                 el: '#app',
                 data: function() {
                     return {
+                        perfList: Array(1000).fill('text', 0, 1000),
                         visibility: true
                     };
                 }
