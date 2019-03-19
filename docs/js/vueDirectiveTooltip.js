@@ -2510,7 +2510,7 @@ var Tooltip$2 = function () {
         this._visible = false;
         this._clearDelay = null;
         this._setEvents();
-        // this._$tt.disableEventListeners();
+        this._$tt.disableEventListeners();
     }
 
     Tooltip.prototype.destroy = function destroy() {
@@ -2695,11 +2695,13 @@ var Tooltip$2 = function () {
     };
 
     Tooltip.prototype.show = function show() {
+        this._$tt.enableEventListeners();
         this.toggle(true);
     };
 
     Tooltip.prototype.hide = function hide() {
         this.toggle(false);
+        this._$tt.disableEventListeners();
     };
 
     Tooltip.prototype.toggle = function toggle(visible) {
@@ -2729,9 +2731,11 @@ var Tooltip$2 = function () {
             this._clearDelay = setTimeout(function () {
                 _this3._visible = visible;
                 if (_this3._visible === true) {
+                    _this3._$tt.enableEventListeners();
                     _this3._$tpl.classList.remove('vue-tooltip-hidden');
                     _this3._$tpl.classList.add('vue-tooltip-visible');
                 } else {
+                    _this3._$tt.disableEventListeners();
                     _this3._$tpl.classList.remove('vue-tooltip-visible');
                     _this3._$tpl.classList.add('vue-tooltip-hidden');
                 }
