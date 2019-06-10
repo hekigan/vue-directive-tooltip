@@ -11,7 +11,8 @@ const EVENTS = {
 
 const DEFAULT_OPTIONS = {
     container: false,
-    delay: 200,
+    delayToShow: 200,
+    delayToHide: 100,
     instance: null, // the popper.js instance
     fixIosSafari: false,
     eventsEnabled: true,
@@ -268,20 +269,17 @@ export default class Tooltip {
     }
 
     toggle (visible, autoHide = true) {
-        let delay = this._options.delay;
+        let delay = visible ? this._options.delayToShow : this._options.delayToHide;
 
         if (this._disabled === true) {
             visible = false;
             delay = 0;
+            delayToHide = 0;
             return;
         }
 
         if (typeof visible !== 'boolean') {
             visible = !this._visible;
-        }
-
-        if (visible === true) {
-            delay = 0;
         }
 
         clearTimeout(this._clearDelay);

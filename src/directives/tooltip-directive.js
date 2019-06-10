@@ -67,7 +67,8 @@ export default {
 };
 
 function filterBindings (binding) {
-    const delay = !binding.value || isNaN(binding.value.delay) ? Tooltip._defaults.delay : binding.value.delay;
+    const delayToShow = !binding.value || isNaN(binding.value.delayToShow) ? Tooltip._defaults.delayToShow : binding.value.delayToShow;
+    const delayToHide = !binding.value || isNaN(binding.value.delayToHide) ? Tooltip._defaults.delayToHide : binding.value.delayToHide;
 
     return {
         class: getClass(binding),
@@ -77,7 +78,8 @@ function filterBindings (binding) {
         triggers: getTriggers(binding),
         fixIosSafari: binding.modifiers.ios || false,
         offset: (binding.value && binding.value.offset) ? binding.value.offset : Tooltip._defaults.offset,
-        delay
+        delayToShow,
+        delayToHide
     };
 }
 

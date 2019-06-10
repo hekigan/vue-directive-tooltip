@@ -20,7 +20,8 @@ A **lot of options** make this tooltip convenient:
 - **content**: simple text or use another html tag
 - **positioning** (right, left, ...)
 - **positioning variants**: start | end. ex: bottom.end, top.start, right.end, etc...
-- **delay** to hide (in ms)
+- **delayToHide** (in ms)
+- **delayToShow** (in ms)
 - **offset** (from the target in px)
 - choose from **several triggers** (hover, focus, click)
 - **full programmatic**, you choose when to show/hide the tooltip
