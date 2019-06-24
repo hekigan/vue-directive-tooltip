@@ -35,6 +35,8 @@ const includes = (stack, needle) => {
 };
 
 export default class Tooltip {
+    static tooltipContainer
+
     constructor (el, options = {}) {
         // Tooltip._defaults = DEFAULT_OPTIONS;
         this._options = {
@@ -53,7 +55,7 @@ export default class Tooltip {
         };
 
         const $tpl = this._createTooltipElement(this.options);
-        document.querySelector('body').appendChild($tpl);
+        this._getTooltipContainer().appendChild($tpl);
 
         this._$el = el;
         this._$tt = new Popper(el, $tpl, this._options);
@@ -67,7 +69,7 @@ export default class Tooltip {
 
     destroy () {
         this._cleanEvents();
-        document.querySelector('body').removeChild(this._$tpl);
+        this._getTooltipContainer().removeChild(this._$tpl);
     }
 
     get options () {
@@ -76,6 +78,17 @@ export default class Tooltip {
 
     get tooltip () {
         return this._$tt;
+    }
+
+    _getTooltipContainer(){
+        let container = Tooltip.tooltipContainer
+        if(!container){
+            container = document.createElement('div')
+            container.id = 'vue-directive-tooltip-container'
+            document.querySelector('body').appendChild(container)
+            Tooltip.tooltipContainer = container
+        }
+        return container
     }
 
     _createTooltipElement (options) {
