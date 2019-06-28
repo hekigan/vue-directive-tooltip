@@ -45,7 +45,7 @@ export default {
                     Tooltip.defaults(installOptions);
                 }
 
-                let options = filterBindings(binding);
+                let options = filterBindings(binding, vnode);
                 el.tooltip = new Tooltip(el, options);
 
                 if (binding.modifiers.notrigger && binding.value.visible === true) {
@@ -57,7 +57,9 @@ export default {
                 }
             },
             componentUpdated (el, binding, vnode, oldVnode) {
-                update(el, binding);
+                if (hasUpdated(binding.value, binding.oldValue)) {
+                    update(el, binding, vnode, oldVnode);
+                }
             },
             unbind (el, binding, vnode, oldVnode) {
                 el.tooltip.destroy();
@@ -66,11 +68,47 @@ export default {
     }
 };
 
-function filterBindings (binding) {
+/**
+ *
+ * @param {*} vnode component's properties
+ * @param {*} oldvnode component's previous properties
+ * @return boolean
+ */
+function hasUpdated (value, oldValue) {
+    let updated = false;
+
+    if (typeof value === 'string' && value !== oldValue) {
+        updated = true;
+    } else if (isObject(value)) {
+        Object.keys(value).forEach(prop => {
+            if (value[prop] !== oldValue[prop]) {
+                updated = true;
+            }
+        });
+    }
+    return updated;
+}
+
+/**
+ * Sanitize data
+ * @param {*} binding
+ * @param {*} vnode
+ * @return {*} filtered data object
+ */
+function filterBindings (binding, vnode) {
     const delay = !binding.value || isNaN(binding.value.delay) ? Tooltip._defaults.delay : binding.value.delay;
+
+    if (binding.value.ref) {
+        if (vnode.context.$refs[binding.value.ref]) {
+            binding.value.html = vnode.context.$refs[binding.value.ref];
+        } else {
+            console.error(`[Tooltip] no REF element [${binding.value.ref}]`); // eslint-disable-line
+        }
+    }
 
     return {
         class: getClass(binding),
+        id: (binding.value) ? binding.value.id : null,
         html: (binding.value) ? binding.value.html : null,
         placement: getPlacement(binding),
         title: getContent(binding),
@@ -90,7 +128,7 @@ function getPlacement ({modifiers, value}) {
     if (MODS.length === 0 && isObject(value) && typeof value.placement === 'string') {
         MODS = value.placement.split('.');
     }
-    let head = '';
+    let head = 'bottom';
     let tail = null;
     for (let i = 0; i < MODS.length; i++) {
         const pos = MODS[i];
@@ -101,6 +139,8 @@ function getPlacement ({modifiers, value}) {
             tail = pos;
         }
     }
+    // console.log((head && tail) ? `${head}-${tail}` : head);
+    // return 'auto';
     return (head && tail) ? `${head}-${tail}` : head;
 }
 
@@ -176,14 +216,18 @@ function getClass ({value}) {
  * @param {*} binding
  * @return HTMLElement | String
  */
-function getContent ({value}) {
+function getContent ({value}, vnode) {
     if (value !== null && isObject(value)) {
         if (value.content !== undefined) {
             return `${value.content}`;
+        } else if (value.id && document.getElementById(value.id)) {
+            return document.getElementById(value.id);
         } else if (value.html && document.getElementById(value.html)) {
             return document.getElementById(value.html);
         } else if (isElement(value.html)) {
             return value.html;
+        } else if (value.ref && vnode) {
+            return vnode.context.$refs[value.ref] || '';
         } else {
             return '';
         }
@@ -197,7 +241,7 @@ function getContent ({value}) {
  * @param {*} el Vue element
  * @param {*} binding
  */
-function update (el, binding) {
+function update (el, binding, vnode, oldVnode) {
     if (typeof binding.value === 'string') {
         el.tooltip.content(binding.value);
     } else {
@@ -205,7 +249,7 @@ function update (el, binding) {
             el.tooltip.class = `${BASE_CLASS} ${binding.value.class.trim()}`;
         }
 
-        el.tooltip.content(getContent(binding));
+        el.tooltip.content(getContent(binding, vnode));
 
         if (!binding.modifiers.notrigger && binding.value && typeof binding.value.visible === 'boolean') {
             el.tooltip.disabled = !binding.value.visible;
@@ -214,10 +258,12 @@ function update (el, binding) {
             el.tooltip.disabled = false;
         }
 
-        if (!el.tooltip.disabled && binding.value && binding.value.visible === true) {
-            el.tooltip.show();
-        } else {
-            el.tooltip.hide();
+        const dir = vnode.data.directives[0];
+
+        if (dir.oldValue.visible !== dir.value.visible) {
+            if (!el.tooltip.disabled) {
+                el.tooltip.toggle(dir.value.visible);
+            }
         }
     }
 }

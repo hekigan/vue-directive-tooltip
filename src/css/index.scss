@@ -41,20 +41,9 @@ $popper-background-color: #000 !default;
         position: absolute;
         margin: 5px;
     }
-    
-    &[x-placement^="top"] {
-        margin-bottom: 5px;
-        
-        .tooltip-arrow {
-            border-width: 5px 5px 0 5px;
-            border-top-color: $popper-background-color;
-            border-bottom-color: transparent !important;
-            border-left-color: transparent !important;
-            border-right-color: transparent !important;
-            bottom: -5px;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
+
+    &[x-out-of-boundaries] {
+        display: none;
     }
     
     &[x-placement^="bottom"] {
@@ -67,6 +56,21 @@ $popper-background-color: #000 !default;
             border-left-color: transparent !important;
             border-right-color: transparent !important;
             top: -5px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    
+    &[x-placement^="top"] {
+        margin-bottom: 5px;
+        
+        .tooltip-arrow {
+            border-width: 5px 5px 0 5px;
+            border-top-color: $popper-background-color;
+            border-bottom-color: transparent !important;
+            border-left-color: transparent !important;
+            border-right-color: transparent !important;
+            bottom: -5px;
             margin-top: 0;
             margin-bottom: 0;
         }

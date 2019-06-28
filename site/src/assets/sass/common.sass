@@ -1,0 +1,234 @@
+@import url('reset.css')
+@import '../../../../src/css/index.scss'
+
+$link-color: #3eaf7c
+
+html,
+body
+    padding: 0
+    margin: 0
+
+body
+    background-color: #fff
+    color: #555
+    display: flex
+    flex-direction: column
+    line-height: 1.5rem
+    height: 100vh
+
+a
+    color: $link-color
+
+strong
+    font-weight: bold
+
+p
+    margin: 20px 0
+
+ol, ul
+    margin: 15px 0
+
+    li
+        margin-left: 20px
+
+ul
+    list-style: disc
+
+ol
+    list-style: decimal
+
+#app
+    display: flex
+    flex: auto 1 1
+    flex-direction: column
+    max-height: 100vh
+    overflow: hidden
+
+header
+    align-items: center
+    background: transparent url('../img/screenshot.jpg')
+    background-size: cover
+    display: flex
+    flex: auto 0 0
+    font-size: 1.5rem
+    padding: 10px 20px
+    z-index: 10
+
+    .menu-handle
+        background: transparent url('../img/menu-icon.svg') no-repeat
+        background-size: 32px 32px
+        cursor: pointer
+        display: inline-block
+        margin-right: 15px
+        height: 32px
+        width: 32px
+
+    .logo
+        height: 24px
+        margin-right: 20px
+
+    h1
+        color: #fff
+        margin: 0
+        text-shadow: 1px 1px 2px #000, -1px -1px 1px #777
+
+        .one-liner
+            color: #555
+            display: block
+            font-size: 1.2rem
+            text-shadow: none
+
+
+.content
+    display: flex
+    flex: auto 1 1
+    position: relative
+    height: 100%
+
+menu
+    background-color: #f9f9f9
+    box-shadow: 1px 1px 6px #333
+    color: #aaa
+    display: flex
+    flex: auto 1 1
+    flex-direction: column
+    width: 70%
+    max-width: 180px
+    padding: 10px 15px
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    overflow-y: scroll
+    transition: box-shadow .3s, transform .3s
+    transform: translateX(0%)
+
+    &.hidden
+        box-shadow: 0px 0px 0px #333
+        transform: translateX(-100%)
+
+
+    ul
+
+        ul
+            margin: 0
+
+    a
+        color: #4f5959
+        text-decoration: none
+
+        &:hover
+            text-decoration: underline
+    
+    .router-link-exact-active
+        color: #42b983
+
+    .github-logo
+        background: transparent url('../img/github-logo.svg') no-repeat left center
+        display: inline-block
+        margin-bottom: 10px
+        margin-left: -10px
+        padding-left: 35px
+        background-size: 40px 20px
+
+    .lists
+        flex: auto 1 1
+
+    footer
+        flex: auto 0 0
+
+        p
+            margin: 0
+
+main
+    flex: auto 1 1
+    height: 100%
+    overflow-y: scroll
+    padding: 0 10px
+
+    h3, h4, h5
+        color: #000
+        font-size: 1.35rem
+        margin: 35px 0 25px 0
+
+    h4
+        font-size: 1.25rem
+        margin: 25px 0 20px 0
+
+    h5
+        font-size: 1.15rem
+        margin: 20px 0 15px 0
+
+code
+    color: #222
+    padding: .25rem .5rem
+    margin: 0
+    font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace
+    font-size: .85em
+    background-color: #9999995e
+    border-radius: 3px
+
+pre 
+    overflow: hidden
+    width: 100%
+
+    code
+        display: block
+        line-height: 1.15rem
+        overflow-x: scroll
+
+section
+    margin-bottom: 20px
+
+.tooltip-target
+    color: $link-color
+
+
+// DESKTOP VERSION
+@media (min-width: 992px)
+
+    header
+        font-size: 2.4rem
+        height: 140px
+
+        .logo
+            height: 50px
+
+        .menu-handle
+            display: none
+
+        h1
+            display: flex
+
+            .one-liner
+                margin-left: 15px
+                margin-top: 4px
+
+    menu
+        box-shadow: none
+        min-width: 180px
+        width: 180px
+        position: static
+        transition: box-shadow .3s, transform .3s
+        transform: none
+
+        &.hidden
+            transform: none
+
+    main
+        padding: 0 30px
+
+
+.fade-in
+    opacity: 0
+    animation: fadeIn ease 1.5s
+    animation-delay: 300ms
+    animation-fill-mode: both
+
+
+@keyframes fadeIn
+    0%
+        opacity: 0
+
+    100%
+        opacity:1

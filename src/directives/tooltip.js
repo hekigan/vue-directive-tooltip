@@ -1,6 +1,10 @@
 import Popper from 'popper.js';
 
-const BASE_CLASS = 'h-tooltip  vue-tooltip-hidden';
+const CSS = {
+    HIDDEN: 'vue-tooltip-hidden',
+    VISIBLE: 'vue-tooltip-visible'
+};
+const BASE_CLASS = `h-tooltip  ${CSS.HIDDEN}`;
 const PLACEMENT = ['top', 'left', 'right', 'bottom', 'auto'];
 const SUB_PLACEMENT = ['start', 'end'];
 
@@ -14,7 +18,7 @@ const DEFAULT_OPTIONS = {
     delay: 200,
     instance: null, // the popper.js instance
     fixIosSafari: false,
-    eventsEnabled: true,
+    eventsEnabled: false,
     html: false,
     modifiers: {
         arrow: {
@@ -42,32 +46,37 @@ export default class Tooltip {
             ...{
                 onCreate: (data) => {
                     this.content(this.tooltip.options.title);
-                    this._$tt.update();
+                    // this._$tt.update();
                 },
                 onUpdate: (data) => {
                     this.content(this.tooltip.options.title);
-                    this._$tt.update();
+                    // this._$tt.update();
                 }
             },
             ...Tooltip.filterOptions(options)
         };
 
-        const $tpl = this._createTooltipElement(this.options);
-        document.querySelector('body').appendChild($tpl);
-
         this._$el = el;
-        this._$tt = new Popper(el, $tpl, this._options);
-        this._$tpl = $tpl;
-        this._disabled = false;
+
+        this._$tpl = this._createTooltipElement(this.options);
+        this._$tt = new Popper(el, this._$tpl, this._options);
+        this.setupPopper();
+    }
+
+    setupPopper () {
+        // this._$el.insertAdjacentElement('afterend', this._$tpl);
+        this.disabled = false;
         this._visible = false;
         this._clearDelay = null;
-        this._setEvents();
         this._$tt.disableEventListeners();
+        this._setEvents();
     }
 
     destroy () {
         this._cleanEvents();
-        document.querySelector('body').removeChild(this._$tpl);
+        if (this._$tpl && this._$tpl.parentNode) {
+            this._$tpl.parentNode.removeChild(this._$tpl);
+        }
     }
 
     get options () {
@@ -76,6 +85,81 @@ export default class Tooltip {
 
     get tooltip () {
         return this._$tt;
+    }
+
+    get visible () {
+        return this._visible;
+    }
+
+    set visible (val) {
+        if (typeof val === 'boolean') {
+            this._visible = val;
+        }
+    }
+
+    get disabled () {
+        return this._disabled;
+    }
+
+    set disabled (val) {
+        if (typeof val === 'boolean') {
+            this._disabled = val;
+        }
+    }
+
+    show () {
+        this.toggle(true);
+    }
+
+    hide () {
+        this.toggle(false);
+    }
+
+    toggle (visible, autoHide = true) {
+        let delay = this._options.delay;
+
+        if (this.disabled === true) {
+            visible = false;
+            delay = 0;
+        }
+
+        if (typeof visible !== 'boolean') {
+            visible = !this._visible;
+        }
+
+        if (visible === true) {
+            delay = 0;
+        }
+
+        clearTimeout(this._clearDelay);
+
+        if (autoHide === true) {
+            this._clearDelay = setTimeout(() => {
+                this.visible = visible;
+                if (this.visible === true && this.disabled !== true) {
+                    // add tooltip node
+                    this._$el.insertAdjacentElement('afterend', this._$tpl);
+
+                    // Need the timeout to be sure that the element is inserted in the DOM
+                    setTimeout(() => {
+                        // enable eventListeners
+                        this._$tt.enableEventListeners();
+                        // only update if the tooltip is visible
+                        this._$tt.scheduleUpdate();
+                        // switch CSS
+                        this._$tpl.classList.replace(CSS.HIDDEN, CSS.VISIBLE);
+                    }, 60);
+                } else {
+                    this._$tpl.classList.replace(CSS.VISIBLE, CSS.HIDDEN);
+                    // remove tooltip node
+                    if (this._$tpl && this._$tpl.parentNode) {
+                        this._$tpl.parentNode.removeChild(this._$tpl);
+                    }
+
+                    this._$tt.disableEventListeners();
+                }
+            }, delay);
+        }
     }
 
     _createTooltipElement (options) {
@@ -101,7 +185,7 @@ export default class Tooltip {
     _events (type = EVENTS.ADD) {
         const evtType = (type === EVENTS.ADD) ? 'addEventListener' : 'removeEventListener';
         if (!Array.isArray(this.options.triggers)) {
-            console.error('trigger should be an array', this.options.triggers);
+            console.error('trigger should be an array', this.options.triggers); // eslint-disable-line
             return;
         }
 
@@ -120,8 +204,8 @@ export default class Tooltip {
             this.options.triggers.map(evt => {
                 switch (evt) {
                 case 'click':
-                    lis('click', this._onToggle.bind(this), false);
-                    document[evtType]('click', this._onDeactivate.bind(this), false);
+                    lis('click', (e) => { this._onToggle(e); }, false);
+                    // document[evtType]('click', this._onDeactivate.bind(this), false);
                     break;
                 case 'hover':
                     lis('mouseenter', this._onActivate.bind(this), false);
@@ -179,15 +263,12 @@ export default class Tooltip {
         } else if (isElement(content)) {
             if (content !== wrapper.children[0]) {
                 wrapper.innerHTML = '';
-                wrapper.appendChild(content);
+                // this.tooltip.htmlContent = content.cloneNode(true);
+                this.tooltip.htmlContent = content;
+                wrapper.appendChild(this.tooltip.htmlContent);
             }
-            // var clonedNode = content.cloneNode(true);
-            // this.tooltip.options.title = clonedNode;
-            // if (isElement(content.parentNode)) {
-            //     content.parentNode.removeChild(content);
-            // }
         } else {
-            console.error('unsupported content type', content);
+            console.error('unsupported content type', content); // eslint-disable-line
         }
     }
 
@@ -249,59 +330,6 @@ export default class Tooltip {
         //     data.originalPlacement = data.placement;
         // }
         Tooltip._defaults = {...Tooltip._defaults, ...data};
-    }
-
-    set disabled (val) {
-        if (typeof val === 'boolean') {
-            this._disabled = val;
-        }
-    }
-
-    show () {
-        this._$tt.enableEventListeners();
-        this.toggle(true);
-    }
-
-    hide () {
-        this.toggle(false);
-        this._$tt.disableEventListeners();
-    }
-
-    toggle (visible, autoHide = true) {
-        let delay = this._options.delay;
-
-        if (this._disabled === true) {
-            visible = false;
-            delay = 0;
-            return;
-        }
-
-        if (typeof visible !== 'boolean') {
-            visible = !this._visible;
-        }
-
-        if (visible === true) {
-            delay = 0;
-        }
-
-        clearTimeout(this._clearDelay);
-
-        if (autoHide === true) {
-            this._clearDelay = setTimeout(() => {
-                this._visible = visible;
-                if (this._visible === true) {
-                    this._$tt.enableEventListeners();
-                    this._$tpl.classList.remove('vue-tooltip-hidden');
-                    this._$tpl.classList.add('vue-tooltip-visible');
-                } else {
-                    this._$tt.disableEventListeners();
-                    this._$tpl.classList.remove('vue-tooltip-visible');
-                    this._$tpl.classList.add('vue-tooltip-hidden');
-                }
-
-                this._$tt.update();
-            }, delay);
-        }
     }
 }
 

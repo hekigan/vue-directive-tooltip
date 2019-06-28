@@ -1,7 +1,11 @@
 {
-  "commitMessage": ":bookmark: v%s",
-  "tagName": "v%s",
-  "prereleaseId": "beta",
-  "tagAnnotation": "Version %s",
-  "changelogCommand": "git log --pretty=format:'* %s (%h)' v[REV_RANGE]"
+  "hooks": {
+    "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+  },
+  "git": {
+    "commitMessage": ":bookmark: v%s",
+    "tagName": "v%s",
+    "tagAnnotation": "Release %s",
+    "changelogCommand": "git log --pretty=format:'* %s (%h)' v[REV_RANGE]"
+  }
 }
