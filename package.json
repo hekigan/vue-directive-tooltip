@@ -24,7 +24,7 @@
     "start": "npm run dev",
     "prepublish": "npm run build",
     "postinstall": "cd ./site && npm install",
-    "release": "npm run build:all && release-it"
+    "release": "release-it"
   },
   "dependencies": {
     "popper.js": "1.15.0"
