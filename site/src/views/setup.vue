@@ -8,11 +8,21 @@
             install the script like so:
         </p>
         <p>
-            <code>npm install vue-directive-tooltip --save</code>
+            <code>
+                sudo npm install -g @vue/cli-service-global<br>
+                npm install vue-directive-tooltip --save
+            </code>
         </p>
         <p>or</p>
         <p>
-            <code>yarn add vue-directive-tooltip</code>
+            The vue service is needed.
+            <code></code>
+        </p>
+        <p>
+            <code>
+                sudo yarn global add @vue/cli-service-global<br>
+                yarn add vue-directive-tooltip
+            </code>
         </p>
 
         <h5>2. use the script with Vue</h5>
