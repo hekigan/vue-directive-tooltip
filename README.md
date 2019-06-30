@@ -7,6 +7,16 @@
 
 > Vue.js tooltip directive ([based on Popper.js](https://github.com/FezVrasta/popper.js))
 
+
+### Installation
+
+`yarn add vue-directive-tooltip`
+
+or
+
+`npm install vue-directive-tooltip --save`
+
+
 ### Usage
 
 Super simple
