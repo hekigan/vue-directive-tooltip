@@ -22,7 +22,6 @@
     "build:all": "node build-all.js",
     "dev": "cd site && npm start",
     "start": "npm run dev",
-    "postinstall": "cd site && npm install",
     "release": "release-it"
   },
   "dependencies": {
