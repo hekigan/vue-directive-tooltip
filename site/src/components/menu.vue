@@ -3,7 +3,7 @@
         <div class="lists">
         <ul class="main-list">
                 <li>
-                    <a v-tooltip.right="'Vue directive tooltip repository'" href="https://github.com/hekigan/vue-directive-tooltip" class="github-logo"><span class="label">Github</span></a>
+                    <a v-tooltip="'Vue directive tooltip repository'" href="https://github.com/hekigan/vue-directive-tooltip" class="github-logo"><span class="label">Github</span></a>
                 </li>
                 <li><router-link to="/">home</router-link></li>
                 <li><router-link to="/setup">setup</router-link></li>
