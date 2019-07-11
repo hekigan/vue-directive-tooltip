@@ -41,7 +41,7 @@ A **lot of options** make this tooltip convenient:
 
 [Full documentation with examples](https://hekigan.github.io/vue-directive-tooltip/)
 
-[<img src="https://hekigan.github.io/vue-directive-tooltip/images/github-screenshot.jpg">](https://hekigan.github.io/vue-directive-tooltip/)
+[<img src="https://hekigan.github.io/vue-directive-tooltip/img/screenshot.jpg">](https://hekigan.github.io/vue-directive-tooltip/)
 
 ### Builds
 
