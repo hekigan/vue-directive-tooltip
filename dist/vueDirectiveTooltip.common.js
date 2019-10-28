@@ -3024,8 +3024,8 @@ function () {
 
           if (_this2.visible === true && _this2.disabled !== true) {
             // add tooltip node
-            _this2._$el.insertAdjacentElement('afterend', _this2._$tpl); // Need the timeout to be sure that the element is inserted in the DOM
-
+            // this._$el.insertAdjacentElement('afterend', this._$tpl);
+            document.querySelector('body').appendChild(_this2._$tpl); // Need the timeout to be sure that the element is inserted in the DOM
 
             setTimeout(function () {
               // enable eventListeners
@@ -3370,17 +3370,9 @@ var SUB_POSITIONS = ['start', 'end'];
 
         if (binding.value && binding.value.visible === false) {
           el.tooltip.disabled = true;
-        } // setTimeout(() => {
-        //     el.tooltip._$tt.scheduleUpdate();
-        //     // console.log(el.tooltip);
-        // }, 70);
-
+        }
       },
       componentUpdated: function componentUpdated(el, binding, vnode, oldVnode) {
-        // first time to insert the node in the page
-        // if (vnode.isRootInsert && !oldVnode.isRootInsert) {
-        //     el.tooltip._$tt.scheduleUpdate();
-        // }
         if (hasUpdated(binding.value, binding.oldValue)) {
           update(el, binding, vnode, oldVnode);
         }
