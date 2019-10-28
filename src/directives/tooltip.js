@@ -138,7 +138,8 @@ export default class Tooltip {
                 this.visible = visible;
                 if (this.visible === true && this.disabled !== true) {
                     // add tooltip node
-                    this._$el.insertAdjacentElement('afterend', this._$tpl);
+                    // this._$el.insertAdjacentElement('afterend', this._$tpl);
+                    document.querySelector('body').appendChild(this._$tpl);
 
                     // Need the timeout to be sure that the element is inserted in the DOM
                     setTimeout(() => {
