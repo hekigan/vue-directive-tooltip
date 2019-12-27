@@ -148,10 +148,10 @@ export default class Tooltip {
                         // only update if the tooltip is visible
                         this._$tt.scheduleUpdate();
                         // switch CSS
-                        this._$tpl.classList.replace(CSS.HIDDEN, CSS.VISIBLE);
+                        this._$tpl.className = this._$tpl.className.replace(CSS.HIDDEN, CSS.VISIBLE);
                     }, 60);
                 } else {
-                    this._$tpl.classList.replace(CSS.VISIBLE, CSS.HIDDEN);
+                    this._$tpl.className = this._$tpl.className.replace(CSS.VISIBLE, CSS.HIDDEN);
                     // remove tooltip node
                     if (this._$tpl && this._$tpl.parentNode) {
                         this._$tpl.parentNode.removeChild(this._$tpl);
